@@ -1,18 +1,14 @@
-<
 <!DOCTYPE html>
 <html lang="uz">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>VibeStudio - Karaoke Maker</title>
-  <!-- TailwindCSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Telegram WebApp SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Google Shriftlari (Top 5 ta shrift) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:ital,wght@0,700;0,900;1,700&family=Poppins:wght@700;800&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;900&family=Poppins:wght@700;800&family=Inter:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -27,36 +23,36 @@
     .font-poppins { font-family: 'Poppins', sans-serif; }
     .font-sfpro { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
-    /* TikTok 9:16 Spotify uslubidagi silliq suriluvchi oyna */
+    /* Spotify 9:16 Viewport */
     .lyrics-viewport {
-      height: 240px;
+      height: 250px;
       overflow: hidden;
       position: relative;
       mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
     }
     .lyrics-container {
-      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .lyric-row {
       transition: all 0.3s ease;
-      transform-origin: center center;
+      text-align: left !important; /* CHAP TOMONGA TARTIBLI TEKISLASH */
     }
     .lyric-active {
       opacity: 1 !important;
-      transform: scale(1.05);
+      transform: scale(1.03);
       color: #ffffff !important;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+      text-shadow: 0 4px 15px rgba(0,0,0,0.9);
     }
     .lyric-inactive {
-      opacity: 0.35;
+      opacity: 0.32;
       color: #a1a1aa;
     }
   </style>
 </head>
 <body class="pb-32">
 
-  <!-- Yuqori panel (Header) -->
+  <!-- Header -->
   <header class="p-4 flex items-center justify-between border-b border-gray-800/80 bg-[#10141d]/90 backdrop-blur sticky top-0 z-50">
     <div class="flex items-center gap-2.5">
       <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center font-black text-sm shadow-md shadow-rose-600/30">V</div>
@@ -65,48 +61,43 @@
         <p class="text-[10px] text-gray-400 font-medium">9:16 Video Generator</p>
       </div>
     </div>
-    <!-- Til tanlash -->
     <div class="flex bg-gray-900 border border-gray-800 rounded-xl p-0.5 text-xs font-bold">
       <button class="px-2.5 py-1 bg-rose-600 text-white rounded-lg shadow">UZ</button>
-      <button class="px-2.5 py-1 text-gray-400 hover:text-white">RU</button>
-      <button class="px-2.5 py-1 text-gray-400 hover:text-white">EN</button>
+      <button class="px-2.5 py-1 text-gray-400">RU</button>
+      <button class="px-2.5 py-1 text-gray-400">EN</button>
     </div>
   </header>
 
   <main class="p-4 space-y-5 max-w-md mx-auto">
 
-    <!-- 1. AUDIO VA MA'LUMOTLAR -->
+    <!-- 1. AUDIO YUKLASH VA IJROCHI -->
     <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
       <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
         <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">1</span>
         MP3 Fayl va Qo‘shiq ma’lumotlari
       </h2>
 
-      <!-- Fayl yuklash -->
       <label class="border-2 border-dashed border-gray-700 hover:border-rose-500 bg-[#0d1017] rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition">
         <svg class="w-7 h-7 text-rose-500 mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
         <span id="audioFileName" class="text-xs text-gray-300 font-semibold text-center truncate max-w-[280px]">Audio tanlash (MP3 / Video)</span>
-        <span class="text-[10px] text-gray-500 mt-0.5">Xotiradan yuklang yoki botga tashlang</span>
         <input type="file" id="audioInput" accept="audio/*,video/*" class="hidden">
       </label>
 
-      <!-- Qo‘shiq & Ijrochi nomlari -->
       <div class="grid grid-cols-2 gap-2.5">
         <div>
           <label class="text-[10px] font-bold text-gray-400 block mb-1">QO‘SHIQ NOMI</label>
-          <input type="text" id="trackTitle" value="Korolmaslar" placeholder="Nomini yozing" class="w-full bg-[#0d1017] border border-gray-700/80 text-xs rounded-xl p-3 focus:outline-none focus:border-rose-500 text-white font-medium">
+          <input type="text" id="trackTitle" value="Korolmaslar" placeholder="Nomi" class="w-full bg-[#0d1017] border border-gray-700 text-xs rounded-xl p-3 text-white font-medium focus:outline-none focus:border-rose-500">
         </div>
         <div>
           <label class="text-[10px] font-bold text-gray-400 block mb-1">IJROCHI NOMI</label>
-          <input type="text" id="artistName" value="Afruza" placeholder="Ijrochi nomi" class="w-full bg-[#0d1017] border border-gray-700/80 text-xs rounded-xl p-3 focus:outline-none focus:border-rose-500 text-white font-medium">
+          <input type="text" id="artistName" value="Afruza" placeholder="Ijrochi" class="w-full bg-[#0d1017] border border-gray-700 text-xs rounded-xl p-3 text-white font-medium focus:outline-none focus:border-rose-500">
         </div>
       </div>
 
-      <!-- Pleyer va Tezlik -->
+      <!-- Player -->
       <div class="space-y-3 pt-1">
         <div class="flex items-center justify-between text-[11px] text-gray-400 font-mono">
           <span id="currTime">0:00</span>
-          <!-- Tezlik boshqaruvi -->
           <div class="flex items-center gap-1 font-sans">
             <button onclick="setSpeed(0.5, this)" class="speed-btn px-2 py-0.5 rounded-lg bg-gray-800 text-gray-300 text-[10px] font-bold">0.5x</button>
             <button onclick="setSpeed(0.75, this)" class="speed-btn px-2 py-0.5 rounded-lg bg-gray-800 text-gray-300 text-[10px] font-bold">0.75x</button>
@@ -119,7 +110,7 @@
         <input type="range" id="seekSlider" value="0" min="0" step="0.05" class="w-full accent-rose-500 h-1.5 bg-gray-800 rounded-lg cursor-pointer">
 
         <div class="flex justify-center">
-          <button id="playPauseBtn" class="w-12 h-12 rounded-full bg-rose-600 hover:bg-rose-500 flex items-center justify-center text-white shadow-lg shadow-rose-600/40 active:scale-95 transition">
+          <button id="playPauseBtn" class="w-12 h-12 rounded-full bg-rose-600 hover:bg-rose-500 flex items-center justify-center text-white shadow-lg shadow-rose-600/40">
             <svg id="playIcon" class="w-6 h-6 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <svg id="pauseIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
           </button>
@@ -134,33 +125,31 @@
         Matn va Sinxronlash (Cheksiz Satrlar)
       </h2>
 
-      <textarea id="rawLyrics" rows="5" placeholder="Qo‘shiq so‘zlarini bu yerga yozing yoki tashlang...&#10;Har bir satrdan so‘ng Enter bosing!" class="w-full bg-[#0d1017] border border-gray-700/80 rounded-xl p-3 text-xs leading-relaxed focus:outline-none focus:border-rose-500 text-gray-200"></textarea>
+      <textarea id="rawLyrics" rows="5" placeholder="Qo‘shiq so‘zlarini yozing... Har bir satrdan so‘ng Enter bosing" class="w-full bg-[#0d1017] border border-gray-700/80 rounded-xl p-3 text-xs leading-relaxed focus:outline-none focus:border-rose-500 text-gray-200"></textarea>
 
-      <button id="prepLyricsBtn" class="w-full py-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-xs font-bold text-white transition active:scale-98">
+      <button id="prepLyricsBtn" class="w-full py-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-xs font-bold text-white transition">
         Satrlarni tayyorlash
       </button>
 
-      <!-- Sinxronlash paneli -->
       <div id="syncControl" class="hidden space-y-3 pt-2">
-        <button id="syncTriggerBtn" class="w-full py-4 bg-gradient-to-r from-rose-600 to-indigo-600 hover:from-rose-500 hover:to-indigo-500 rounded-2xl font-black text-sm uppercase tracking-wider shadow-lg shadow-rose-600/30 active:scale-95 transition">
+        <button id="syncTriggerBtn" class="w-full py-4 bg-gradient-to-r from-rose-600 to-indigo-600 rounded-2xl font-black text-sm uppercase tracking-wider shadow-lg shadow-rose-600/30 active:scale-95 transition">
           ⏱ 1-satr boshlanishida bosing
         </button>
 
         <div class="flex gap-2">
-          <button id="undoSyncBtn" class="flex-1 py-2.5 bg-gray-800 hover:bg-gray-700 rounded-xl text-xs font-semibold text-gray-300 transition">↩ 1 qadam orqaga</button>
+          <button id="undoSyncBtn" class="flex-1 py-2.5 bg-gray-800 rounded-xl text-xs font-semibold text-gray-300">↩ 1 qadam orqaga</button>
           <button id="resetSyncBtn" class="py-2.5 px-4 bg-red-950/40 border border-red-900/60 text-red-400 rounded-xl text-xs font-semibold">Tozalash</button>
         </div>
 
-        <!-- Sinxronlangan satrlar -->
         <div id="syncedLinesList" class="space-y-1.5 max-h-52 overflow-y-auto pr-1"></div>
       </div>
     </section>
 
-    <!-- 3. FON, SHIFT VA GALEREYA -->
+    <!-- 3. FON, SHIFT VA BALANDLIK SLAYDERI -->
     <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
       <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
         <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">3</span>
-        Fon, Ranglar va Shriftlar
+        Dizayn va Joylashuv Sozlamalari
       </h2>
 
       <!-- Baxmal fon ranglari -->
@@ -175,89 +164,95 @@
         </div>
       </div>
 
-      <!-- Shaxsiy Galereya Rasmi (Custom Background Image) -->
+      <!-- Galereyadan rasm -->
       <div>
-        <label class="text-[11px] text-gray-400 block mb-1.5 font-medium">Shaxsiy rasm fon (Galereyadan ixtiyoriy):</label>
-        <label class="border border-gray-700 bg-[#0d1017] hover:border-rose-500 rounded-xl p-3 flex items-center justify-between cursor-pointer transition">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-            <span id="bgImageName" class="text-xs text-gray-300">Rasm tanlash...</span>
-          </div>
+        <label class="text-[11px] text-gray-400 block mb-1.5 font-medium">Shaxsiy rasm fon (Galereyadan):</label>
+        <label class="border border-gray-700 bg-[#0d1017] rounded-xl p-3 flex items-center justify-between cursor-pointer">
+          <span id="bgImageName" class="text-xs text-gray-300">Rasm tanlash...</span>
           <span class="text-[10px] font-bold bg-gray-800 px-2.5 py-1 rounded-lg text-gray-300">Yuklash</span>
           <input type="file" id="bgImageInput" accept="image/*" class="hidden">
         </label>
       </div>
 
-      <!-- Shrift tanlash (Top 5) -->
+      <!-- Shrift tanlash -->
       <div>
-        <label class="text-[11px] text-gray-400 block mb-1.5 font-medium">Shriftni tanlang:</label>
-        <select id="fontSelect" class="w-full bg-[#0d1017] border border-gray-700/80 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-rose-500 font-semibold">
-          <option value="Montserrat" selected>1. Montserrat Bold (Spotify Classic)</option>
-          <option value="SFPro">2. SF Pro Display (Apple Music Style)</option>
-          <option value="BebasNeue">3. Bebas Neue (Katta & Viral)</option>
-          <option value="Poppins">4. Poppins SemiBold (Zamonaviy)</option>
-          <option value="Gilroy">5. Gilroy ExtraBold (TikTok Trend)</option>
+        <label class="text-[11px] text-gray-400 block mb-1.5 font-medium">Shrift turi:</label>
+        <select id="fontSelect" class="w-full bg-[#0d1017] border border-gray-700 rounded-xl p-3 text-xs text-white font-semibold">
+          <option value="Montserrat" selected>1. Montserrat Bold (Spotify)</option>
+          <option value="SFPro">2. SF Pro Display (Apple Music)</option>
+          <option value="BebasNeue">3. Bebas Neue (Viral Katta)</option>
+          <option value="Poppins">4. Poppins SemiBold</option>
+          <option value="Gilroy">5. Gilroy ExtraBold</option>
         </select>
       </div>
 
-      <!-- Matn razmerini boshqarish -->
+      <!-- YANGI: MATN BALANDLIGI (TEPAROQ / PASTROQ) -->
+      <div>
+        <div class="flex justify-between text-[11px] text-gray-400 mb-1 font-medium">
+          <span>Matn balandligi (Baland / Past):</span>
+          <span id="posDisplay" class="font-bold text-rose-500">O‘rtada</span>
+        </div>
+        <input type="range" id="posSlider" min="-80" max="80" value="0" class="w-full accent-rose-500 h-1.5 bg-gray-800 rounded-lg cursor-pointer">
+      </div>
+
+      <!-- Matn hajmi -->
       <div>
         <div class="flex justify-between text-[11px] text-gray-400 mb-1 font-medium">
           <span>Matn hajmi (Font size):</span>
           <span id="fontSizeDisplay" class="font-bold text-rose-500">22px</span>
         </div>
-        <input type="range" id="fontSizeSlider" min="14" max="32" value="22" class="w-full accent-rose-500 h-1.5 bg-gray-800 rounded-lg cursor-pointer">
+        <input type="range" id="fontSizeSlider" min="16" max="32" value="22" class="w-full accent-rose-500 h-1.5 bg-gray-800 rounded-lg cursor-pointer">
       </div>
     </section>
 
-    <!-- 4. JONLI PREVIEW (TIKTOK 9:16) -->
+    <!-- 4. JONLI NATIJA (TIKTOK 9:16 PREVIEW) -->
     <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-3">
-      <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Jonli Natija (TikTok 9:16 HD Preview)</h2>
+      <div class="flex items-center justify-between">
+        <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Jonli TikTok 9:16 Ko‘rinishi</h2>
+        <span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded-full font-bold">● Chapga tekislangan</span>
+      </div>
 
       <!-- 9:16 Karta -->
-      <div id="previewCard" class="w-full aspect-[9/16] max-h-[520px] rounded-2xl p-6 flex flex-col justify-between border border-gray-800 shadow-2xl relative overflow-hidden bg-[#1f0814] transition-all duration-300 bg-cover bg-center">
+      <div id="previewCard" class="w-full aspect-[9/16] max-h-[520px] rounded-2xl p-6 flex flex-col justify-between border border-gray-800 shadow-2xl relative overflow-hidden bg-[#1f0814] bg-cover bg-center transition-all duration-300">
         
-        <!-- Galereya rasmi bo'lsa xiralashgan qora qatlam -->
-        <div id="bgOverlay" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] hidden"></div>
+        <div id="bgOverlay" class="absolute inset-0 bg-black/45 backdrop-blur-[2px] hidden"></div>
 
-        <!-- Yuqori qism: Nomi va Ijrochi (normal masofada proporsional) -->
-        <div class="z-10">
+        <!-- Yuqori qism: Nomi va Ijrochi (chap tomonda) -->
+        <div class="z-10 text-left">
           <h3 id="prevTitle" class="text-xl font-black text-white leading-snug drop-shadow-md">Korolmaslar</h3>
           <p id="prevArtist" class="text-xs font-bold text-gray-300/90 mt-1 drop-shadow-sm">Afruza</p>
         </div>
 
-        <!-- O‘rta qism: Spotify Scroll Lyrics -->
-        <div class="lyrics-viewport z-10 my-auto flex flex-col justify-center">
-          <div id="previewLyricsContainer" class="lyrics-container space-y-5 text-center font-montserrat font-black">
+        <!-- O‘rta qism: Matnlar CHAPGA tekislangan holda -->
+        <div id="lyricsViewport" class="lyrics-viewport z-10 my-auto flex flex-col justify-center">
+          <div id="previewLyricsContainer" class="lyrics-container space-y-5 text-left font-montserrat font-black px-2">
             <div class="lyric-row lyric-active text-lg leading-tight">
-              Satrlarni tayyorlang va sinxronlang...
+              Satrlarni sinxronlang...
             </div>
           </div>
         </div>
 
-        <!-- Pastki qism: Logotip va sifat belgisi -->
+        <!-- Pastki qism -->
         <div class="z-10 flex items-center justify-between text-[9px] font-mono tracking-widest uppercase opacity-40">
           <span>9:16 60FPS HD</span>
-          <span>@ms.music</span>
+          <span>@MS.MUSIC</span>
         </div>
       </div>
     </section>
 
-    <!-- Asosiy tugma -->
-    <button id="renderBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-xl shadow-emerald-950 transition active:scale-95">
+    <!-- Yuborish tugmasi -->
+    <button id="renderBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-xl shadow-emerald-950 active:scale-95 transition">
       🚀 Videoni Tayyorlash (Kanalga Yuborish)
     </button>
   </main>
 
   <script>
-    // ASOSIY O‘ZGARUVCHILAR
     let audio = new Audio();
     let lyrics = [];
     let activeIndex = 0;
     let selectedBgColor = "#1f0814";
     let customImageFile = null;
 
-    // DOM Elementlari
     const audioInput = document.getElementById('audioInput');
     const audioFileName = document.getElementById('audioFileName');
     const playPauseBtn = document.getElementById('playPauseBtn');
@@ -278,16 +273,18 @@
     const fontSelect = document.getElementById('fontSelect');
     const fontSizeSlider = document.getElementById('fontSizeSlider');
     const fontSizeDisplay = document.getElementById('fontSizeDisplay');
+    const posSlider = document.getElementById('posSlider');
+    const posDisplay = document.getElementById('posDisplay');
     const trackTitle = document.getElementById('trackTitle');
     const artistName = document.getElementById('artistName');
     const prevTitle = document.getElementById('prevTitle');
     const prevArtist = document.getElementById('prevArtist');
     const previewCard = document.getElementById('previewCard');
+    const lyricsViewport = document.getElementById('lyricsViewport');
     const previewLyricsContainer = document.getElementById('previewLyricsContainer');
     const bgOverlay = document.getElementById('bgOverlay');
     const renderBtn = document.getElementById('renderBtn');
 
-    // 1. Audio Yuklash
     audioInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
@@ -340,10 +337,9 @@
       return `${m}:${s < 10 ? '0' : ''}${s}`;
     }
 
-    // 2. Satrlarni Tayyorlash (Cheksiz satrlar & 2-qatorga tushsa ham 1 ta deb hisoblash)
     prepLyricsBtn.addEventListener('click', () => {
       const text = rawLyrics.value.trim();
-      if (!text) return alert("Iltimos, qo‘shiq so‘zlarini kiriting!");
+      if (!text) return alert("Iltimos, so‘zlarni kiriting!");
       
       const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
       lyrics = lines.map(line => ({ text: line, time: null }));
@@ -396,7 +392,7 @@
     function renderLinesList() {
       syncedLinesList.innerHTML = lyrics.map((l, i) => `
         <div class="flex items-center justify-between p-2.5 rounded-xl text-xs ${i === activeIndex ? 'bg-rose-950/40 border border-rose-600/50' : 'bg-[#0d1017]'}">
-          <span class="truncate max-w-[230px] font-medium ${l.time !== null ? 'text-white' : 'text-gray-400'}">${i + 1}. ${l.text}</span>
+          <span class="truncate max-w-[230px] font-medium text-left ${l.time !== null ? 'text-white' : 'text-gray-400'}">${i + 1}. ${l.text}</span>
           <span class="font-mono text-[11px] px-2 py-0.5 rounded-lg ${l.time !== null ? 'bg-rose-600 text-white font-bold' : 'bg-gray-800 text-gray-500'}">
             ${l.time !== null ? formatTime(l.time) : '--:--'}
           </span>
@@ -404,7 +400,6 @@
       `).join('');
     }
 
-    // 3. Shrift, Rang va Galereya rasmini sozlash
     function setBgColor(color, btn) {
       selectedBgColor = color;
       customImageFile = null;
@@ -430,6 +425,13 @@
       }
     });
 
+    // BALANDLIK SLAYDERI ISHLASHI
+    posSlider.addEventListener('input', (e) => {
+      const val = e.target.value;
+      lyricsViewport.style.transform = `translateY(${val}px)`;
+      posDisplay.innerText = val > 0 ? `Pastroqda (+${val})` : (val < 0 ? `Teparoqda (${val})` : "O‘rtada");
+    });
+
     function getFontClass(fontKey) {
       if (fontKey === 'Montserrat') return 'font-montserrat';
       if (fontKey === 'SFPro') return 'font-sfpro';
@@ -445,7 +447,7 @@
       const font = getFontClass(fontSelect.value);
       const size = fontSizeSlider.value;
 
-      previewLyricsContainer.className = `lyrics-container space-y-5 text-center ${font} font-black`;
+      previewLyricsContainer.className = `lyrics-container space-y-5 text-left ${font} font-black px-2`;
       
       if (lyrics.length === 0) return;
 
@@ -456,7 +458,7 @@
       `).join('');
     }
 
-    // Jonli Spotify Scroll qilish
+    // Spotify silliq chapdan scroll
     function updatePreviewScroll(currTime) {
       if (lyrics.length === 0) return;
       
@@ -478,8 +480,7 @@
           }
         });
 
-        // Markazga surish
-        const rowHeight = 44;
+        const rowHeight = 46;
         previewLyricsContainer.style.transform = `translateY(-${curIdx * rowHeight}px)`;
       }
     }
@@ -492,7 +493,6 @@
     trackTitle.addEventListener('input', renderLivePreview);
     artistName.addEventListener('input', renderLivePreview);
 
-    // 4. Serverga yuborish (Render & Kanalga chiqarish)
     renderBtn.addEventListener('click', async () => {
       if (lyrics.length === 0 || lyrics.some(l => l.time === null)) {
         return alert("Iltimos, barcha satrlarni sinxronlang!");
@@ -502,12 +502,8 @@
       renderBtn.innerText = "⏳ Serverga yuborilmoqda...";
 
       const formData = new FormData();
-      if (customImageFile) {
-        formData.append('image', customImageFile);
-      }
-      if (audioInput.files[0]) {
-        formData.append('audio', audioInput.files[0]);
-      }
+      if (customImageFile) formData.append('image', customImageFile);
+      if (audioInput.files[0]) formData.append('audio', audioInput.files[0]);
 
       const payload = {
         title: trackTitle.value.trim() || "Musiqa",
@@ -515,31 +511,18 @@
         lyrics: lyrics,
         bgColor: selectedBgColor,
         font: fontSelect.value,
-        fontSize: fontSizeSlider.value
+        fontSize: fontSizeSlider.value,
+        yOffset: posSlider.value // Balandlik parametri
       };
       formData.append('data', JSON.stringify(payload));
 
-      try {
-        // Backend API manziliga so'rov (Hugging Face / VPS manzili)
-        const response = await fetch('/api/render', {
-          method: 'POST',
-          body: formData
-        });
-        
-        alert("✅ So‘rov qabul qilindi! Video orqa fonda tayyorlanmoqda va maxfiy kanalingizga tashlanadi.");
-        renderBtn.innerText = "🚀 Tayyorlanmoqda (Kanalga tushadi)";
-      } catch (err) {
-        // Agar WebApp Telegram ichida bo'lsa
-        if (window.Telegram && window.Telegram.WebApp) {
-          window.Telegram.WebApp.sendData(JSON.stringify(payload));
-          alert("✅ Buyruq botga yuborildi!");
-        } else {
-          alert("Serverga ulanishda xatolik! Botga audio yuborib qayta urinib ko'ring.");
-        }
-        renderBtn.disabled = false;
-        renderBtn.innerText = "🚀 Videoni Tayyorlash (Kanalga Yuborish)";
+      if (window.Telegram && window.Telegram.WebApp) {
+        window.Telegram.WebApp.sendData(JSON.stringify(payload));
       }
+
+      alert("✅ Video tayyorlash buyrug'i yuborildi! Orqa fonda tayyorlanib, maxfiy kanalga yuklanadi.");
+      renderBtn.innerText = "🚀 Tayyorlanmoqda (Kanalga tushadi)";
     });
   </script>
 </body>
-                                                                                                     </html>
+</html>
