@@ -56,7 +56,7 @@
       <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center font-black text-sm shadow-md shadow-rose-600/30">V</div>
       <div>
         <h1 class="text-base font-black tracking-wide leading-tight">VibeStudio Pro</h1>
-        <p class="text-[10px] text-emerald-400 font-bold">● Chrome Direct 60FPS Engine</p>
+        <p class="text-[10px] text-emerald-400 font-bold">● 60 FPS Video Studio</p>
       </div>
     </div>
     <div class="flex bg-gray-900 border border-gray-800 rounded-xl p-0.5 text-xs font-bold">
@@ -149,7 +149,7 @@
         Dizayn va Joylashuv
       </h2>
 
-      <!-- Baxmal fon ranglari -->
+      <!-- Fon ranglari -->
       <div>
         <label class="text-[11px] text-gray-400 block mb-2 font-medium">Baxmal Fon Rangini Tanlang:</label>
         <div class="grid grid-cols-5 gap-2 text-center text-[10px] font-bold">
@@ -235,13 +235,13 @@
       </div>
     </div>
 
-    <!-- ASOSIY CHROME RENDER TUGMASI -->
+    <!-- TUGMA -->
     <button id="renderBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-xl shadow-emerald-950 active:scale-95 transition">
       🎬 Videoni Chiqarish (Yuklab olish & Kanalga tashlash)
     </button>
   </main>
 
-  <!-- Maxfiy Canvas (Orqa fonda 1080x1920 video chizish uchun) -->
+  <!-- Maxfiy Canvas 1080x1920 (Render uchun) -->
   <canvas id="renderCanvas" width="1080" height="1920" class="hidden"></canvas>
 
   <script>
@@ -466,7 +466,7 @@
     artistName.addEventListener('input', renderLivePreview);
 
     // ==========================================
-    // CHROME ICHIDA 60 FPS VIDEO RENDER ENGINE
+    // CHROME 60 FPS RENDER VA DINAMIK KESISH
     // ==========================================
     renderBtn.addEventListener('click', async () => {
       if (!audio.src) return alert("Iltimos, avval audio fayl yuklang!");
@@ -478,10 +478,13 @@
       renderProgress.classList.remove('hidden');
 
       const ctx = renderCanvas.getContext('2d');
-      const lastLyricTime = lyrics[lyrics.length - 1].time;
-      const endCutTime = lastLyricTime + 2.0; // TALAB: 2 soniya o'tib kesiladi!
 
-      // Web Audio stream
+      // DINAMIK VAQT: Faqat oxirgi satr vaqtini oladi (qat'iy chegara yo'q)
+      const validTimes = lyrics.map(l => parseFloat(l.time)).filter(t => !isNaN(t));
+      const lastLyricTime = Math.max(...validTimes);
+      const endCutTime = lastLyricTime + 1.2; // Aynan oxirgi satr aytilgach 1 soniyada to'xtaydi
+
+      // Web Audio
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioCtx.createMediaElementSource(audio);
       const dest = audioCtx.createMediaStreamDestination();
@@ -496,7 +499,7 @@
 
       const recorder = new MediaRecorder(combinedStream, {
         mimeType: 'video/webm;codecs=vp9',
-        videoBitsPerSecond: 8000000 // 8 Mbps tiniq sifat
+        videoBitsPerSecond: 9000000
       });
 
       const chunks = [];
@@ -505,7 +508,7 @@
       recorder.onstop = async () => {
         const blob = new Blob(chunks, { type: 'video/mp4' });
         
-        // 1. TELEFONNING O'ZIGA YUKLAB BERISH
+        // 1. Telefonning o'ziga yuklash
         const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = downloadUrl;
@@ -514,19 +517,19 @@
         a.click();
         document.body.removeChild(a);
 
-        // 2. MAXFIY KANALGA YUBORISH (-1004491053728)
+        // 2. Maxfiy kanalga yuborish (-1004491053728)
         progressText.innerText = "📤 Maxfiy kanalga yuklanmoqda...";
         try {
           const form = new FormData();
           form.append('chat_id', CHANNEL_ID);
           form.append('video', blob, 'video.mp4');
-          form.append('caption', `🎵 ${trackTitle.value} — ${artistName.value}\n🔥 60 FPS 9:16 TikTok Format\n✨ @ms.music`);
+          form.append('caption', `🎵 ${trackTitle.value} — ${artistName.value}\n🔥 60 FPS 9:16 Format\n✨ @ms.music`);
 
           await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
             method: 'POST',
             body: form
           });
-          alert("🎉 VIDEO TAYYOR!\n1. Telefoningizga yuklab olindi!\n2. Maxfiy kanalingizga ham joylandi!");
+          alert("🎉 VIDEO TAYYOR!\n1. Telefoningizga yuklandi!\n2. Maxfiy kanalingizga ham joylandi!");
         } catch (err) {
           alert("Video telefoningizga yuklandi!");
         }
@@ -535,25 +538,27 @@
         renderProgress.classList.add('hidden');
       };
 
-      // Renderni boshlash
       recorder.start();
       audio.currentTime = 0;
       audio.playbackRate = 1.0;
       await audio.play();
 
       function drawFrame() {
-        if (audio.currentTime >= endCutTime || audio.paused) {
+        // DINAMIK TO'XTASH: Oxirgi satr vaqtiga yetganda avtomatik tugaydi
+        if (audio.currentTime >= endCutTime || audio.ended) {
           audio.pause();
           recorder.stop();
           return;
         }
 
-        // Progress foizi
+        const currSec = Math.floor(audio.currentTime);
+        const totalSec = Math.floor(endCutTime);
         const percent = Math.min(100, Math.floor((audio.currentTime / endCutTime) * 100));
+        
         progressBar.style.width = `${percent}%`;
-        progressText.innerText = `⏳ 60 FPS Render qilinmoqda: ${percent}%`;
+        progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni o‘chirmang)`;
 
-        // Fon chizish (Rasm yoki rang)
+        // Fon chizish
         if (bgImageObj) {
           ctx.drawImage(bgImageObj, 0, 0, 1080, 1920);
           ctx.fillStyle = "rgba(0,0,0,0.5)";
@@ -563,7 +568,7 @@
           ctx.fillRect(0, 0, 1080, 1920);
         }
 
-        // Qo'shiq va ijrochi nomi (Tepada proporsional, chap tomonda)
+        // Qo'shiq va ijrochi nomi
         ctx.fillStyle = "#ffffff";
         ctx.font = "900 68px Montserrat, sans-serif";
         ctx.textAlign = "left";
@@ -573,16 +578,15 @@
         ctx.font = "700 42px Montserrat, sans-serif";
         ctx.fillText(artistName.value || "Afruza", 100, 280);
 
-        // Faol satrni aniqlash
+        // Faol satr
         let curIdx = -1;
         for (let i = 0; i < lyrics.length; i++) {
           if (lyrics[i].time !== null && audio.currentTime >= lyrics[i].time) curIdx = i;
         }
 
-        const yBase = 1000 + parseInt(posSlider.value) * 3; // Baland-past slayderi
-        const fontPx = parseInt(fontSizeSlider.value) * 2.4; // 1080p ga moslash
+        const yBase = 1000 + parseInt(posSlider.value) * 3;
+        const fontPx = parseInt(fontSizeSlider.value) * 2.4;
 
-        // Satrlarni chap tomonga chizish
         lyrics.forEach((item, idx) => {
           const diff = idx - curIdx;
           const yPos = yBase + (diff * 140);
@@ -603,7 +607,7 @@
           }
         });
 
-        // Pastki brend belgisi
+        // Brend
         ctx.fillStyle = "rgba(255,255,255,0.3)";
         ctx.font = "600 24px monospace";
         ctx.fillText("9:16 60FPS HD", 100, 1840);
@@ -617,4 +621,4 @@
     });
   </script>
 </body>
-</html>
+          </html>
