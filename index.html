@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VibeStudio Pro - 4K 160FPS Video Generator</title>
+  <title>VibeStudio - 9:16 60 FPS Video Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -56,7 +56,7 @@
       <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center font-black text-sm shadow-md shadow-rose-600/30">V</div>
       <div>
         <h1 class="text-base font-black tracking-wide leading-tight">VibeStudio Pro</h1>
-        <p class="text-[10px] text-emerald-400 font-bold">● 4K Ultra HD & 160 FPS</p>
+        <p class="text-[10px] text-emerald-400 font-bold">● 1080x1920 60 FPS Ultra-Stable</p>
       </div>
     </div>
     <div class="flex bg-gray-900 border border-gray-800 rounded-xl p-0.5 text-xs font-bold">
@@ -142,85 +142,10 @@
       </div>
     </section>
 
-    <!-- 3. REKLAMA BANNERI (YANGI FUNKSIYA) -->
-    <section class="bg-[#151922] border border-cyan-500/40 rounded-2xl p-4 shadow-xl space-y-3">
-      <div class="flex items-center justify-between">
-        <h2 class="text-xs font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
-          <span class="w-5 h-5 rounded bg-cyan-600/20 text-cyan-400 flex items-center justify-center text-[11px]">★</span>
-          Reklama Banneri Sozlamasi
-        </h2>
-        <span class="text-[10px] font-bold text-cyan-400 font-mono">ON / OFF</span>
-      </div>
-
-      <!-- 3 Rejim: Yo'q / Surat / Video -->
-      <div class="grid grid-cols-3 gap-1.5 bg-[#0d1017] p-1 rounded-xl border border-gray-800 text-[11px] font-bold text-center">
-        <button onclick="setAdMode('none', this)" class="ad-mode-btn py-2 rounded-lg bg-rose-600 text-white shadow">❌ Yo‘q</button>
-        <button onclick="setAdMode('image', this)" class="ad-mode-btn py-2 rounded-lg text-gray-400 hover:text-white">🖼 Surat</button>
-        <button onclick="setAdMode('video', this)" class="ad-mode-btn py-2 rounded-lg text-gray-400 hover:text-white">🎥 Video</button>
-      </div>
-
-      <!-- Reklama faylini yuklash -->
-      <div id="adFileBox" class="hidden space-y-2.5 pt-1">
-        <label class="border border-dashed border-cyan-500/50 bg-[#0d1017] rounded-xl p-3 flex items-center justify-between cursor-pointer">
-          <span id="adMediaLabel" class="text-xs text-gray-300 truncate max-w-[200px]">Reklama faylini tanlang...</span>
-          <span class="text-[10px] font-bold bg-cyan-600 text-slate-950 px-2.5 py-1 rounded-lg">Fayl ochish</span>
-          <input type="file" id="adMediaInput" accept="image/*,video/*" class="hidden">
-        </label>
-
-        <!-- Joylashuv va O'lcham -->
-        <div class="grid grid-cols-2 gap-2 text-[10px]">
-          <div>
-            <label class="text-gray-400 block mb-1">Joylashuvi:</label>
-            <select id="adPositionSelect" class="w-full bg-[#0d1017] border border-gray-700 rounded-lg p-2 text-white font-semibold">
-              <option value="top_right" selected>Yuqori O‘ng</option>
-              <option value="top_left">Yuqori Chap</option>
-              <option value="bottom_right">Pastki O‘ng</option>
-              <option value="bottom_left">Pastki Chap</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-gray-400 block mb-1">Banner o‘lchami:</label>
-            <select id="adSizeSelect" class="w-full bg-[#0d1017] border border-gray-700 rounded-lg p-2 text-white font-semibold">
-              <option value="small">Kichik (180x120)</option>
-              <option value="medium" selected>O‘rtacha (240x160)</option>
-              <option value="large">Katta (300x200)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. SIFAT VA FPS SOZLAMASI (4K & 160 FPS) -->
-    <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-3">
-      <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
-        <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">4</span>
-        4K & 160 FPS Render Sozlamasi
-      </h2>
-
-      <div class="grid grid-cols-2 gap-2.5">
-        <div>
-          <label class="text-[10px] font-bold text-gray-400 block mb-1">VIDEO SIFATI</label>
-          <select id="qualitySelect" class="w-full bg-[#0d1017] border border-gray-700 text-xs rounded-xl p-2.5 text-white font-semibold">
-            <option value="4k" selected>⚡ 4K Ultra (2160x3840)</option>
-            <option value="2k">🔥 2K QHD (1440x2560)</option>
-            <option value="1080p">✨ Full HD (1080x1920)</option>
-          </select>
-        </div>
-        <div>
-          <label class="text-[10px] font-bold text-gray-400 block mb-1">KADR CHASTOTASI</label>
-          <select id="fpsSelect" class="w-full bg-[#0d1017] border border-gray-700 text-xs rounded-xl p-2.5 text-white font-semibold">
-            <option value="160" selected>🚀 160 FPS (Ultra Smooth)</option>
-            <option value="120">⚡ 120 FPS</option>
-            <option value="60">🎬 60 FPS (Standart)</option>
-          </select>
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. FON, SHIFT VA BALANDLIK -->
+    <!-- 3. FON, SHIFT VA BALANDLIK -->
     <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
       <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
-        <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">5</span>
+        <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">3</span>
         Dizayn va Joylashuv
       </h2>
 
@@ -277,7 +202,7 @@
       </div>
     </section>
 
-    <!-- 6. JONLI NATIJA -->
+    <!-- 4. JONLI NATIJA -->
     <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-3">
       <div class="flex items-center justify-between">
         <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Jonli TikTok 9:16 Ko‘rinishi</h2>
@@ -286,13 +211,6 @@
 
       <div id="previewCard" class="w-full aspect-[9/16] max-h-[520px] rounded-2xl p-6 flex flex-col justify-between border border-gray-800 shadow-2xl relative overflow-hidden bg-[#1f0814] bg-cover bg-center transition-all duration-300">
         <div id="bgOverlay" class="absolute inset-0 bg-black/45 backdrop-blur-[2px] hidden"></div>
-        
-        <!-- Live Preview Ad Overlay Element -->
-        <div id="prevAdBox" class="hidden absolute z-30 rounded-xl border border-white/40 shadow-2xl overflow-hidden bg-black/60 pointer-events-none transition-all">
-          <img id="prevAdImg" class="w-full h-full object-cover hidden">
-          <video id="prevAdVid" class="w-full h-full object-cover hidden" muted loop playsinline></video>
-        </div>
-
         <div class="z-10 text-left">
           <h3 id="prevTitle" class="text-xl font-black text-white leading-snug drop-shadow-md">Korolmaslar</h3>
           <p id="prevArtist" class="text-xs font-bold text-gray-300/90 mt-1 drop-shadow-sm">Afruza</p>
@@ -303,7 +221,7 @@
           </div>
         </div>
         <div class="z-10 flex items-center justify-between text-[9px] font-mono tracking-widest uppercase opacity-40">
-          <span id="prevBadge">9:16 160FPS 4K</span>
+          <span>9:16 60FPS HD</span>
           <span>@MS.MUSIC</span>
         </div>
       </div>
@@ -311,7 +229,7 @@
 
     <!-- Progress Paneli -->
     <div id="renderProgress" class="hidden p-4 bg-gray-900 border border-emerald-600/50 rounded-2xl text-center space-y-2">
-      <p id="progressText" class="text-xs font-bold text-emerald-400">⏳ 160 FPS 4K Video render qilinmoqda...</p>
+      <p id="progressText" class="text-xs font-bold text-emerald-400">⏳ 60 FPS Video render qilinmoqda...</p>
       <div class="w-full bg-gray-800 rounded-full h-2">
         <div id="progressBar" class="bg-emerald-500 h-2 rounded-full transition-all duration-200" style="width: 5%"></div>
       </div>
@@ -323,7 +241,7 @@
     </button>
   </main>
 
-  <!-- Maxfiy Canvas (Dinamik 4K / 2K / 1080p Render) -->
+  <!-- Maxfiy Canvas 1080x1920 (Barqaror 60 FPS Render) -->
   <canvas id="renderCanvas" width="1080" height="1920" class="hidden"></canvas>
 
   <script>
@@ -335,10 +253,6 @@
     let activeIndex = 0;
     let selectedBgColor = "#1f0814";
     let bgImageObj = null;
-
-    // Reklama Banner Holati
-    let adMode = 'none'; // 'none' | 'image' | 'video'
-    let adMediaElement = null; // Image or Video element
 
     const audioInput = document.getElementById('audioInput');
     const audioFileName = document.getElementById('audioFileName');
@@ -375,107 +289,6 @@
     const progressText = document.getElementById('progressText');
     const progressBar = document.getElementById('progressBar');
     const renderCanvas = document.getElementById('renderCanvas');
-    const qualitySelect = document.getElementById('qualitySelect');
-    const fpsSelect = document.getElementById('fpsSelect');
-    const prevBadge = document.getElementById('prevBadge');
-
-    // Reklama elementlari
-    const adFileBox = document.getElementById('adFileBox');
-    const adMediaInput = document.getElementById('adMediaInput');
-    const adMediaLabel = document.getElementById('adMediaLabel');
-    const adPositionSelect = document.getElementById('adPositionSelect');
-    const adSizeSelect = document.getElementById('adSizeSelect');
-    const prevAdBox = document.getElementById('prevAdBox');
-    const prevAdImg = document.getElementById('prevAdImg');
-    const prevAdVid = document.getElementById('prevAdVid');
-
-    function setAdMode(mode, btn) {
-      adMode = mode;
-      document.querySelectorAll('.ad-mode-btn').forEach(b => {
-        b.classList.remove('bg-rose-600', 'text-white', 'shadow');
-        b.classList.add('text-gray-400');
-      });
-      btn.classList.remove('text-gray-400');
-      btn.classList.add('bg-rose-600', 'text-white', 'shadow');
-
-      if (mode === 'none') {
-        adFileBox.classList.add('hidden');
-        prevAdBox.classList.add('hidden');
-        adMediaElement = null;
-      } else {
-        adFileBox.classList.remove('hidden');
-        adMediaInput.accept = mode === 'image' ? 'image/*' : 'video/*';
-        adMediaLabel.innerText = mode === 'image' ? "Surat tanlang (.png, .jpg)..." : "Video tanlang (.mp4)...";
-      }
-      updatePreviewAd();
-    }
-
-    adMediaInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      adMediaLabel.innerText = file.name;
-
-      if (adMode === 'image') {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          adMediaElement = new Image();
-          adMediaElement.src = ev.target.result;
-          prevAdImg.src = ev.target.result;
-          prevAdImg.classList.remove('hidden');
-          prevAdVid.classList.add('hidden');
-          updatePreviewAd();
-        };
-        reader.readAsDataURL(file);
-      } else if (adMode === 'video') {
-        const url = URL.createObjectURL(file);
-        adMediaElement = document.createElement('video');
-        adMediaElement.src = url;
-        adMediaElement.muted = true; // 100% OVOZSIZ
-        adMediaElement.loop = true;
-        adMediaElement.play();
-
-        prevAdVid.src = url;
-        prevAdVid.muted = true;
-        prevAdVid.play();
-        prevAdVid.classList.remove('hidden');
-        prevAdImg.classList.add('hidden');
-        updatePreviewAd();
-      }
-    });
-
-    adPositionSelect.addEventListener('change', updatePreviewAd);
-    adSizeSelect.addEventListener('change', updatePreviewAd);
-
-    function updatePreviewAd() {
-      if (adMode === 'none' || !adMediaElement) {
-        prevAdBox.classList.add('hidden');
-        return;
-      }
-      prevAdBox.classList.remove('hidden');
-
-      const pos = adPositionSelect.value;
-      const size = adSizeSelect.value;
-
-      // Hajm
-      let w = "72px", h = "48px";
-      if (size === 'medium') { w = "90px"; h = "60px"; }
-      if (size === 'large') { w = "110px"; h = "74px"; }
-      prevAdBox.style.width = w;
-      prevAdBox.style.height = h;
-
-      // O'rin
-      prevAdBox.style.top = (pos === 'top_right' || pos === 'top_left') ? '16px' : 'auto';
-      prevAdBox.style.bottom = (pos === 'bottom_right' || pos === 'bottom_left') ? '24px' : 'auto';
-      prevAdBox.style.left = (pos === 'top_left' || pos === 'bottom_left') ? '16px' : 'auto';
-      prevAdBox.style.right = (pos === 'top_right' || pos === 'bottom_right') ? '16px' : 'auto';
-    }
-
-    qualitySelect.addEventListener('change', () => {
-      prevBadge.innerText = `9:16 ${fpsSelect.value}FPS ${qualitySelect.value.toUpperCase()}`;
-    });
-    fpsSelect.addEventListener('change', () => {
-      prevBadge.innerText = `9:16 ${fpsSelect.value}FPS ${qualitySelect.value.toUpperCase()}`;
-    });
 
     audioInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -653,7 +466,7 @@
     artistName.addEventListener('input', renderLivePreview);
 
     // ==========================================
-    // 4K 160 FPS RENDER & ANIQ VAQT KESISH DASTURI
+    // 1080x1920 60 FPS ULTRA-BARQAROR RENDER
     // ==========================================
     renderBtn.addEventListener('click', async () => {
       if (!audio.src) return alert("Iltimos, avval audio fayl yuklang!");
@@ -664,25 +477,14 @@
       renderBtn.disabled = true;
       renderProgress.classList.remove('hidden');
 
-      // 1. Sifat va Kadr hajmini sozlash:
-      const quality = qualitySelect.value;
-      let cWidth = 1080, cHeight = 1920, bitRate = 12000000;
-      if (quality === '4k') {
-        cWidth = 2160; cHeight = 3840; bitRate = 28000000; // 4K 28 Mbps
-      } else if (quality === '2k') {
-        cWidth = 1440; cHeight = 2560; bitRate = 18000000; // 2K 18 Mbps
-      }
-
-      renderCanvas.width = cWidth;
-      renderCanvas.height = cHeight;
+      renderCanvas.width = 1080;
+      renderCanvas.height = 1920;
       const ctx = renderCanvas.getContext('2d');
 
-      const fps = parseInt(fpsSelect.value) || 160;
-
-      // 2. Aniq Vaqt: Oxirgi satr vaqti + 1.8s (Hech qachon qisqarib ketmaslik kafolati)
+      // Vaqtni to'g'ri hisoblash: Oxirgi satr vaqti + 1.5s
       const validTimes = lyrics.map(l => parseFloat(l.time)).filter(t => !isNaN(t));
       const lastLyricTime = Math.max(...validTimes);
-      const endCutTime = Math.min(audio.duration, lastLyricTime + 1.8);
+      const endCutTime = Math.min(audio.duration, lastLyricTime + 1.5);
 
       // Web Audio
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -691,20 +493,20 @@
       source.connect(dest);
       source.connect(audioCtx.destination);
 
-      const canvasStream = renderCanvas.captureStream(fps);
+      const canvasStream = renderCanvas.captureStream(60);
       const combinedStream = new MediaStream([
         ...canvasStream.getVideoTracks(),
         ...dest.stream.getAudioTracks()
       ]);
 
-      let mime = 'video/webm;codecs=vp9';
-      if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1')) {
-        mime = 'video/mp4;codecs=avc1';
+      let mime = 'video/webm;codecs=vp9,opus';
+      if (MediaRecorder.isTypeSupported('video/mp4;codecs=avc1,mp4a.40.2')) {
+        mime = 'video/mp4;codecs=avc1,mp4a.40.2';
       }
 
       const recorder = new MediaRecorder(combinedStream, {
         mimeType: mime,
-        videoBitsPerSecond: bitRate
+        videoBitsPerSecond: 6000000 // 6 Mbps barqaror va tiniq
       });
 
       const chunks = [];
@@ -715,11 +517,11 @@
       recorder.onstop = async () => {
         const blob = new Blob(chunks, { type: 'video/mp4' });
         
-        // 1. Telefonning o'ziga yuklash
+        // 1. Telefon galereyasiga yuklash
         const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = downloadUrl;
-        a.download = `${trackTitle.value || 'Vibe'}_${quality}_${fps}fps.mp4`;
+        a.download = `${trackTitle.value || 'Vibe'}_60fps.mp4`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -730,13 +532,13 @@
           const form = new FormData();
           form.append('chat_id', CHANNEL_ID);
           form.append('video', blob, 'video.mp4');
-          form.append('caption', `🎵 ${trackTitle.value} — ${artistName.value}\n🔥 ${quality.toUpperCase()} | ${fps} FPS Format\n✨ @ms.music`);
+          form.append('caption', `🎵 ${trackTitle.value} — ${artistName.value}\n🔥 60 FPS 9:16 Format\n✨ @ms.music`);
 
           await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
             method: 'POST',
             body: form
           });
-          alert(`🎉 VIDEO TAYYOR!\n1. Telefoningizga ${quality.toUpperCase()} ${fps} FPS yuklandi!\n2. Maxfiy kanalingizga ham joylandi!`);
+          alert("🎉 VIDEO TAYYOR!\n1. Telefoningizga to‘liq yuklandi!\n2. Maxfiy kanalingizga ham joylandi!");
         } catch (err) {
           alert("Video telefoningizga yuklandi!");
         }
@@ -745,26 +547,26 @@
         renderProgress.classList.add('hidden');
       };
 
-      recorder.start(250); // Har 250ms da bufer olinadi (yo'qolmaydi)
+      recorder.start(250); // Har 250ms da bufer olinadi
       audio.currentTime = 0;
       audio.playbackRate = 1.0;
       await audio.play();
 
-      let isFinishing = false;
+      let isFinished = false;
 
       function drawFrame() {
-        if (isFinishing) return;
+        if (isFinished) return;
 
-        // Aniq to'xtash: Audio endCutTime ga yetganda 800ms to'liq bufer kutib to'xtatiladi:
+        // Aniq to'xtash: audio endCutTime ga yetganda 600ms kutiladi
         if (audio.currentTime >= endCutTime || audio.ended) {
-          isFinishing = true;
+          isFinished = true;
           audio.pause();
-          progressText.innerText = "⏳ Fayl tayyorlanmoqda, kuting...";
+          progressText.innerText = "⏳ Fayl to‘liq yozilmoqda, kuting...";
           setTimeout(() => {
             if (recorder.state !== 'inactive') {
               recorder.stop();
             }
-          }, 800);
+          }, 600);
           return;
         }
 
@@ -773,96 +575,63 @@
         const percent = Math.min(100, Math.floor((audio.currentTime / endCutTime) * 100));
         
         progressBar.style.width = `${percent}%`;
-        progressText.innerText = `⏳ ${quality.toUpperCase()} ${fps} FPS Yozilmoqda: ${currSec}s / ${totalSec}s`;
-
-        // Masshtab koeffitsiyenti (4K uchun 2x, 2K uchun 1.33x)
-        const scale = cWidth / 1080;
+        progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni yopmang)`;
 
         // 1. Fon chizish
         if (bgImageObj) {
-          ctx.drawImage(bgImageObj, 0, 0, cWidth, cHeight);
+          ctx.drawImage(bgImageObj, 0, 0, 1080, 1920);
           ctx.fillStyle = "rgba(0,0,0,0.5)";
-          ctx.fillRect(0, 0, cWidth, cHeight);
+          ctx.fillRect(0, 0, 1080, 1920);
         } else {
           ctx.fillStyle = selectedBgColor;
-          ctx.fillRect(0, 0, cWidth, cHeight);
+          ctx.fillRect(0, 0, 1080, 1920);
         }
 
-        // 2. Reklama Bannerini Chizish (Agar tanlangan bo'lsa)
-        if (adMode !== 'none' && adMediaElement) {
-          const pos = adPositionSelect.value;
-          const sz = adSizeSelect.value;
-
-          let adW = 240 * scale;
-          let adH = 160 * scale;
-          if (sz === 'small') { adW = 180 * scale; adH = 120 * scale; }
-          if (sz === 'large') { adW = 320 * scale; adH = 210 * scale; }
-
-          let adX = cWidth - adW - (60 * scale);
-          let adY = 100 * scale;
-
-          if (pos === 'top_left') { adX = 60 * scale; adY = 100 * scale; }
-          if (pos === 'bottom_right') { adX = cWidth - adW - (60 * scale); adY = cHeight - adH - (180 * scale); }
-          if (pos === 'bottom_left') { adX = 60 * scale; adY = cHeight - adH - (180 * scale); }
-
-          ctx.save();
-          ctx.beginPath();
-          ctx.roundRect(adX, adY, adW, adH, 20 * scale);
-          ctx.clip();
-          ctx.drawImage(adMediaElement, adX, adY, adW, adH);
-
-          // Nozik oppoq chegara
-          ctx.lineWidth = 4 * scale;
-          ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-          ctx.stroke();
-          ctx.restore();
-        }
-
-        // 3. Qo'shiq va ijrochi nomi
+        // 2. Qo'shiq va ijrochi nomi
         ctx.fillStyle = "#ffffff";
-        ctx.font = `900 ${68 * scale}px Montserrat, sans-serif`;
+        ctx.font = "900 68px Montserrat, sans-serif";
         ctx.textAlign = "left";
-        ctx.fillText(trackTitle.value || "Korolmaslar", 100 * scale, 220 * scale);
+        ctx.fillText(trackTitle.value || "Korolmaslar", 100, 220);
 
         ctx.fillStyle = "#a1a1aa";
-        ctx.font = `700 ${42 * scale}px Montserrat, sans-serif`;
-        ctx.fillText(artistName.value || "Afruza", 100 * scale, 280 * scale);
+        ctx.font = "700 42px Montserrat, sans-serif";
+        ctx.fillText(artistName.value || "Afruza", 100, 280);
 
-        // 4. Faol satr
+        // 3. Faol satr
         let curIdx = -1;
         for (let i = 0; i < lyrics.length; i++) {
           if (lyrics[i].time !== null && audio.currentTime >= lyrics[i].time) curIdx = i;
         }
 
-        const yBase = (1000 + parseInt(posSlider.value) * 3) * scale;
-        const fontPx = parseInt(fontSizeSlider.value) * 2.4 * scale;
+        const yBase = 1000 + parseInt(posSlider.value) * 3;
+        const fontPx = parseInt(fontSizeSlider.value) * 2.4;
 
         lyrics.forEach((item, idx) => {
           const diff = idx - curIdx;
-          const yPos = yBase + (diff * (140 * scale));
+          const yPos = yBase + (diff * 140);
 
-          if (yPos > 400 * scale && yPos < 1700 * scale) {
+          if (yPos > 400 && yPos < 1700) {
             if (idx === curIdx) {
               ctx.fillStyle = "#ffffff";
-              ctx.font = `900 ${fontPx + (8 * scale)}px Montserrat, sans-serif`;
+              ctx.font = `900 ${fontPx + 8}px Montserrat, sans-serif`;
               ctx.shadowColor = "rgba(0,0,0,0.9)";
-              ctx.shadowBlur = 20 * scale;
-              ctx.fillText(item.text, 100 * scale, yPos);
+              ctx.shadowBlur = 20;
+              ctx.fillText(item.text, 100, yPos);
               ctx.shadowBlur = 0;
             } else {
               ctx.fillStyle = "rgba(161, 161, 170, 0.35)";
               ctx.font = `700 ${fontPx}px Montserrat, sans-serif`;
-              ctx.fillText(item.text, 100 * scale, yPos);
+              ctx.fillText(item.text, 100, yPos);
             }
           }
         });
 
-        // 5. Brend
+        // 4. Brend
         ctx.fillStyle = "rgba(255,255,255,0.3)";
-        ctx.font = `600 ${24 * scale}px monospace`;
-        ctx.fillText(`9:16 ${fps}FPS ${quality.toUpperCase()}`, 100 * scale, 1840 * scale);
+        ctx.font = "600 24px monospace";
+        ctx.fillText("9:16 60FPS HD", 100, 1840);
         ctx.textAlign = "right";
-        ctx.fillText("@MS.MUSIC", (1080 - 100) * scale, 1840 * scale);
+        ctx.fillText("@MS.MUSIC", 980, 1840);
 
         requestAnimationFrame(drawFrame);
       }
@@ -871,4 +640,4 @@
     });
   </script>
 </body>
-</html>
+  </html>
