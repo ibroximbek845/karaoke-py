@@ -3,60 +3,56 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>VibeStudio - 9:16 60 FPS Video Studio</title>
+  <title>VibeStudio Pro - 1M Viral 60FPS Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;900&family=Poppins:wght@700;800&family=Inter:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Poppins:wght@700;800&family=Inter:wght@600;800&display=swap" rel="stylesheet">
 
   <style>
     body {
-      background-color: #0b0e14;
+      background-color: #080a0f;
       color: #ffffff;
       font-family: 'Inter', sans-serif;
       -webkit-tap-highlight-color: transparent;
       user-select: none;
     }
     .font-montserrat { font-family: 'Montserrat', sans-serif; }
-    .font-bebas { font-family: 'Bebas Neue', sans-serif; letter-spacing: 1.5px; }
-    .font-poppins { font-family: 'Poppins', sans-serif; }
-    .font-sfpro { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-
     .lyrics-viewport {
-      height: 250px;
+      height: 260px;
       overflow: hidden;
       position: relative;
       mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
       -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
     }
     .lyrics-container {
-      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .lyric-row {
-      transition: all 0.3s ease;
+      transition: all 0.35s ease;
       text-align: left !important;
     }
     .lyric-active {
       opacity: 1 !important;
-      transform: scale(1.03);
+      transform: scale(1.04);
       color: #ffffff !important;
-      text-shadow: 0 4px 15px rgba(0,0,0,0.9);
+      text-shadow: 0 0 25px rgba(255,255,255,0.85);
     }
     .lyric-inactive {
-      opacity: 0.32;
-      color: #a1a1aa;
+      opacity: 0.28;
+      color: #94a3b8;
     }
   </style>
 </head>
 <body class="pb-36">
 
   <!-- Header -->
-  <header class="p-4 flex items-center justify-between border-b border-gray-800/80 bg-[#10141d]/90 backdrop-blur sticky top-0 z-50">
+  <header class="p-4 flex items-center justify-between border-b border-gray-800/80 bg-[#0e121a]/90 backdrop-blur sticky top-0 z-50">
     <div class="flex items-center gap-2.5">
-      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 to-pink-500 flex items-center justify-center font-black text-sm shadow-md shadow-rose-600/30">V</div>
+      <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 via-pink-500 to-amber-400 flex items-center justify-center font-black text-sm shadow-lg shadow-rose-600/30">V</div>
       <div>
         <h1 class="text-base font-black tracking-wide leading-tight">VibeStudio Pro</h1>
-        <p class="text-[10px] text-emerald-400 font-bold">● 1080x1920 60 FPS Ultra-Stable</p>
+        <p class="text-[10px] text-emerald-400 font-bold">● 1M Viral 60 FPS Engine</p>
       </div>
     </div>
     <div class="flex bg-gray-900 border border-gray-800 rounded-xl p-0.5 text-xs font-bold">
@@ -68,13 +64,13 @@
   <main class="p-4 space-y-5 max-w-md mx-auto">
 
     <!-- 1. AUDIO YUKLASH VA IJROCHI -->
-    <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
+    <section class="bg-[#121620] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
       <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
         <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">1</span>
         MP3 Qo‘shiq va Ijrochi
       </h2>
 
-      <label class="border-2 border-dashed border-gray-700 hover:border-rose-500 bg-[#0d1017] rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition">
+      <label class="border-2 border-dashed border-gray-700 hover:border-rose-500 bg-[#0a0d14] rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer transition">
         <svg class="w-7 h-7 text-rose-500 mb-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
         <span id="audioFileName" class="text-xs text-gray-300 font-semibold text-center truncate max-w-[280px]">Audio tanlash (MP3)</span>
         <input type="file" id="audioInput" accept="audio/*" class="hidden">
@@ -82,12 +78,12 @@
 
       <div class="grid grid-cols-2 gap-2.5">
         <div>
-          <label class="text-[10px] font-bold text-gray-400 block mb-1">QO‘SHIQ NOMI</label>
-          <input type="text" id="trackTitle" value="Korolmaslar" class="w-full bg-[#0d1017] border border-gray-700 text-xs rounded-xl p-3 text-white font-medium focus:outline-none focus:border-rose-500">
+          <label class="text-[10px] font-bold text-gray-400 block mb-1">IJROCHI NOMI</label>
+          <input type="text" id="artistName" value="Manuş Baba" class="w-full bg-[#0a0d14] border border-gray-700 text-xs rounded-xl p-3 text-white font-medium focus:outline-none focus:border-rose-500">
         </div>
         <div>
-          <label class="text-[10px] font-bold text-gray-400 block mb-1">IJROCHI NOMI</label>
-          <input type="text" id="artistName" value="Afruza" class="w-full bg-[#0d1017] border border-gray-700 text-xs rounded-xl p-3 text-white font-medium focus:outline-none focus:border-rose-500">
+          <label class="text-[10px] font-bold text-gray-400 block mb-1">QO‘SHIQ NOMI</label>
+          <input type="text" id="trackTitle" value="Bu Havada Gidilmez" class="w-full bg-[#0a0d14] border border-gray-700 text-xs rounded-xl p-3 text-white font-medium focus:outline-none focus:border-rose-500">
         </div>
       </div>
 
@@ -116,13 +112,13 @@
     </section>
 
     <!-- 2. MATN VA SINXRONLASH -->
-    <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
+    <section class="bg-[#121620] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
       <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
         <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">2</span>
         Matn va Sinxronlash
       </h2>
 
-      <textarea id="rawLyrics" rows="5" placeholder="Qo‘shiq so‘zlarini yozing... Har bir satrdan so‘ng Enter bosing" class="w-full bg-[#0d1017] border border-gray-700/80 rounded-xl p-3 text-xs leading-relaxed focus:outline-none focus:border-rose-500 text-gray-200"></textarea>
+      <textarea id="rawLyrics" rows="5" placeholder="Qo‘shiq so‘zlarini yozing... Har bir satrdan so‘ng Enter bosing" class="w-full bg-[#0a0d14] border border-gray-700/80 rounded-xl p-3 text-xs leading-relaxed focus:outline-none focus:border-rose-500 text-gray-200"></textarea>
 
       <button id="prepLyricsBtn" class="w-full py-3 bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-xl text-xs font-bold text-white transition">
         Satrlarni tayyorlash
@@ -143,7 +139,7 @@
     </section>
 
     <!-- 3. FON, SHIFT VA BALANDLIK -->
-    <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
+    <section class="bg-[#121620] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-4">
       <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
         <span class="w-5 h-5 rounded bg-rose-600/20 text-rose-500 flex items-center justify-center text-[11px]">3</span>
         Dizayn va Joylashuv
@@ -157,36 +153,24 @@
           <button onclick="setBgColor('#071326', this)" class="color-btn p-2.5 rounded-xl border border-blue-950 bg-[#071326] text-blue-200">Okean</button>
           <button onclick="setBgColor('#061c12', this)" class="color-btn p-2.5 rounded-xl border border-emerald-950 bg-[#061c12] text-emerald-200">Zumrad</button>
           <button onclick="setBgColor('#241505', this)" class="color-btn p-2.5 rounded-xl border border-amber-950 bg-[#241505] text-amber-200">Karamel</button>
-          <button onclick="setBgColor('#0a0b0d', this)" class="color-btn p-2.5 rounded-xl border border-gray-800 bg-[#0a0b0d] text-gray-200">Qora</button>
+          <button onclick="setBgColor('#090a0d', this)" class="color-btn p-2.5 rounded-xl border border-gray-800 bg-[#090a0d] text-gray-200">Qora</button>
         </div>
       </div>
 
       <!-- Galereyadan rasm -->
       <div>
         <label class="text-[11px] text-gray-400 block mb-1.5 font-medium">Shaxsiy rasm fon (Galereyadan):</label>
-        <label class="border border-gray-700 bg-[#0d1017] rounded-xl p-3 flex items-center justify-between cursor-pointer">
+        <label class="border border-gray-700 bg-[#0a0d14] rounded-xl p-3 flex items-center justify-between cursor-pointer">
           <span id="bgImageName" class="text-xs text-gray-300">Rasm tanlash...</span>
           <span class="text-[10px] font-bold bg-gray-800 px-2.5 py-1 rounded-lg text-gray-300">Yuklash</span>
           <input type="file" id="bgImageInput" accept="image/*" class="hidden">
         </label>
       </div>
 
-      <!-- Shrift tanlash -->
-      <div>
-        <label class="text-[11px] text-gray-400 block mb-1.5 font-medium">Shrift turi:</label>
-        <select id="fontSelect" class="w-full bg-[#0d1017] border border-gray-700 rounded-xl p-3 text-xs text-white font-semibold">
-          <option value="Montserrat" selected>1. Montserrat Bold (Spotify)</option>
-          <option value="SFPro">2. SF Pro Display (Apple Music)</option>
-          <option value="BebasNeue">3. Bebas Neue (Viral Katta)</option>
-          <option value="Poppins">4. Poppins SemiBold</option>
-          <option value="Gilroy">5. Gilroy ExtraBold</option>
-        </select>
-      </div>
-
       <!-- Matn balandligi -->
       <div>
         <div class="flex justify-between text-[11px] text-gray-400 mb-1 font-medium">
-          <span>Matn balandligi (Baland / Past):</span>
+          <span>Matn balandligi:</span>
           <span id="posDisplay" class="font-bold text-rose-500">O‘rtada</span>
         </div>
         <input type="range" id="posSlider" min="-80" max="80" value="0" class="w-full accent-rose-500 h-1.5 bg-gray-800 rounded-lg cursor-pointer">
@@ -203,26 +187,38 @@
     </section>
 
     <!-- 4. JONLI NATIJA -->
-    <section class="bg-[#151922] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-3">
+    <section class="bg-[#121620] border border-gray-800/80 rounded-2xl p-4 shadow-xl space-y-3">
       <div class="flex items-center justify-between">
         <h2 class="text-xs font-bold text-gray-300 uppercase tracking-wider">Jonli TikTok 9:16 Ko‘rinishi</h2>
-        <span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded-full font-bold">● Chapga tekislangan</span>
+        <span class="text-[10px] text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded-full font-bold">● Silliq Lerp Scroll</span>
       </div>
 
       <div id="previewCard" class="w-full aspect-[9/16] max-h-[520px] rounded-2xl p-6 flex flex-col justify-between border border-gray-800 shadow-2xl relative overflow-hidden bg-[#1f0814] bg-cover bg-center transition-all duration-300">
-        <div id="bgOverlay" class="absolute inset-0 bg-black/45 backdrop-blur-[2px] hidden"></div>
+        <div id="bgOverlay" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] hidden"></div>
+        
         <div class="z-10 text-left">
-          <h3 id="prevTitle" class="text-xl font-black text-white leading-snug drop-shadow-md">Korolmaslar</h3>
-          <p id="prevArtist" class="text-xs font-bold text-gray-300/90 mt-1 drop-shadow-sm">Afruza</p>
+          <h3 id="prevArtist" class="text-2xl font-black text-white leading-tight drop-shadow-md">Manuş Baba</h3>
+          <p id="prevTitle" class="text-xs font-bold text-gray-300 mt-1 drop-shadow-sm flex items-center gap-1.5">
+            <span>Bu Havada Gidilmez</span>
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+          </p>
         </div>
+
         <div id="lyricsViewport" class="lyrics-viewport z-10 my-auto flex flex-col justify-center">
-          <div id="previewLyricsContainer" class="lyrics-container space-y-5 text-left font-montserrat font-black px-2">
+          <div id="previewLyricsContainer" class="lyrics-container space-y-6 text-left font-montserrat font-black px-2">
             <div class="lyric-row lyric-active text-lg leading-tight">Satrlarni sinxronlang...</div>
           </div>
         </div>
-        <div class="z-10 flex items-center justify-between text-[9px] font-mono tracking-widest uppercase opacity-40">
-          <span>9:16 60FPS HD</span>
-          <span>@MS.MUSIC</span>
+
+        <div class="z-10 space-y-3">
+          <!-- Mini Progress Bar -->
+          <div class="w-full bg-white/20 h-1 rounded-full overflow-hidden">
+            <div id="prevProgressLine" class="bg-white h-full rounded-full transition-all duration-150" style="width: 35%"></div>
+          </div>
+          <div class="flex items-center justify-between text-[9px] font-mono tracking-widest uppercase opacity-50">
+            <span>9:16 60FPS HD</span>
+            <span>@MS.MUSIC</span>
+          </div>
         </div>
       </div>
     </section>
@@ -236,7 +232,7 @@
     </div>
 
     <!-- TUGMA -->
-    <button id="renderBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-xl shadow-emerald-950 active:scale-95 transition">
+    <button id="renderBtn" class="w-full py-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-600 rounded-2xl font-black text-sm uppercase tracking-wider text-white shadow-xl shadow-emerald-950 active:scale-95 transition">
       🎬 Videoni Chiqarish (Yuklab olish & Kanalga tashlash)
     </button>
   </main>
@@ -253,6 +249,9 @@
     let activeIndex = 0;
     let selectedBgColor = "#1f0814";
     let bgImageObj = null;
+
+    // Smooth Lerp Scroll uchun o'zgaruvchi:
+    let smoothIndex = 0;
 
     const audioInput = document.getElementById('audioInput');
     const audioFileName = document.getElementById('audioFileName');
@@ -271,7 +270,6 @@
     const syncedLinesList = document.getElementById('syncedLinesList');
     const bgImageInput = document.getElementById('bgImageInput');
     const bgImageName = document.getElementById('bgImageName');
-    const fontSelect = document.getElementById('fontSelect');
     const fontSizeSlider = document.getElementById('fontSizeSlider');
     const fontSizeDisplay = document.getElementById('fontSizeDisplay');
     const posSlider = document.getElementById('posSlider');
@@ -283,6 +281,7 @@
     const previewCard = document.getElementById('previewCard');
     const lyricsViewport = document.getElementById('lyricsViewport');
     const previewLyricsContainer = document.getElementById('previewLyricsContainer');
+    const prevProgressLine = document.getElementById('prevProgressLine');
     const bgOverlay = document.getElementById('bgOverlay');
     const renderBtn = document.getElementById('renderBtn');
     const renderProgress = document.getElementById('renderProgress');
@@ -308,6 +307,10 @@
       seekSlider.value = audio.currentTime;
       currTime.innerText = formatTime(audio.currentTime);
       updatePreviewScroll(audio.currentTime);
+
+      if (audio.duration) {
+        prevProgressLine.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+      }
     });
 
     playPauseBtn.addEventListener('click', () => {
@@ -348,6 +351,7 @@
       const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
       lyrics = lines.map(line => ({ text: line, time: null }));
       activeIndex = 0;
+      smoothIndex = 0;
       syncControl.classList.remove('hidden');
       renderLinesList();
       updateSyncTriggerButton();
@@ -392,7 +396,7 @@
 
     function renderLinesList() {
       syncedLinesList.innerHTML = lyrics.map((l, i) => `
-        <div class="flex items-center justify-between p-2.5 rounded-xl text-xs ${i === activeIndex ? 'bg-rose-950/40 border border-rose-600/50' : 'bg-[#0d1017]'}">
+        <div class="flex items-center justify-between p-2.5 rounded-xl text-xs ${i === activeIndex ? 'bg-rose-950/40 border border-rose-600/50' : 'bg-[#0a0d14]'}">
           <span class="truncate max-w-[230px] font-medium text-left ${l.time !== null ? 'text-white' : 'text-gray-400'}">${i + 1}. ${l.text}</span>
           <span class="font-mono text-[11px] px-2 py-0.5 rounded-lg ${l.time !== null ? 'bg-rose-600 text-white font-bold' : 'bg-gray-800 text-gray-500'}">
             ${l.time !== null ? formatTime(l.time) : '--:--'}
@@ -434,8 +438,8 @@
     });
 
     function renderLivePreview() {
-      prevTitle.innerText = trackTitle.value.trim() || "Korolmaslar";
-      prevArtist.innerText = artistName.value.trim() || "Afruza";
+      prevArtist.innerText = artistName.value.trim() || "Manuş Baba";
+      prevTitle.innerHTML = `<span>${trackTitle.value.trim() || "Bu Havada Gidilmez"}</span><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>`;
       const size = fontSizeSlider.value;
       previewLyricsContainer.innerHTML = lyrics.map((l, idx) => `
         <div id="prev-line-${idx}" style="font-size: ${size}px;" class="lyric-row lyric-inactive leading-snug">${l.text}</div>
@@ -454,7 +458,7 @@
           if (!el) return;
           el.className = idx === curIdx ? 'lyric-row lyric-active leading-snug' : 'lyric-row lyric-inactive leading-snug';
         });
-        previewLyricsContainer.style.transform = `translateY(-${curIdx * 46}px)`;
+        previewLyricsContainer.style.transform = `translateY(-${curIdx * 48}px)`;
       }
     }
 
@@ -466,7 +470,7 @@
     artistName.addEventListener('input', renderLivePreview);
 
     // ==========================================
-    // 1080x1920 60 FPS ULTRA-BARQAROR RENDER
+    // 1M VIRAL 1080x1920 60 FPS RENDER ENGINE
     // ==========================================
     renderBtn.addEventListener('click', async () => {
       if (!audio.src) return alert("Iltimos, avval audio fayl yuklang!");
@@ -481,10 +485,9 @@
       renderCanvas.height = 1920;
       const ctx = renderCanvas.getContext('2d');
 
-      // Vaqtni to'g'ri hisoblash: Oxirgi satr vaqti + 1.5s
       const validTimes = lyrics.map(l => parseFloat(l.time)).filter(t => !isNaN(t));
       const lastLyricTime = Math.max(...validTimes);
-      const endCutTime = Math.min(audio.duration, lastLyricTime + 1.5);
+      const endCutTime = Math.min(audio.duration, lastLyricTime + 1.6);
 
       // Web Audio
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -506,7 +509,7 @@
 
       const recorder = new MediaRecorder(combinedStream, {
         mimeType: mime,
-        videoBitsPerSecond: 6000000 // 6 Mbps barqaror va tiniq
+        videoBitsPerSecond: 6500000 // 6.5 Mbps ultra-silliq
       });
 
       const chunks = [];
@@ -517,22 +520,20 @@
       recorder.onstop = async () => {
         const blob = new Blob(chunks, { type: 'video/mp4' });
         
-        // 1. Telefon galereyasiga yuklash
         const downloadUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = downloadUrl;
-        a.download = `${trackTitle.value || 'Vibe'}_60fps.mp4`;
+        a.download = `${artistName.value || 'Track'}_${trackTitle.value || 'Vibe'}_60fps.mp4`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
 
-        // 2. Maxfiy kanalga yuborish (-1004491053728)
         progressText.innerText = "📤 Maxfiy kanalga yuklanmoqda...";
         try {
           const form = new FormData();
           form.append('chat_id', CHANNEL_ID);
           form.append('video', blob, 'video.mp4');
-          form.append('caption', `🎵 ${trackTitle.value} — ${artistName.value}\n🔥 60 FPS 9:16 Format\n✨ @ms.music`);
+          form.append('caption', `🎵 ${artistName.value} — ${trackTitle.value}\n🔥 60 FPS 9:16 Viral Format\n✨ @ms.music`);
 
           await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
             method: 'POST',
@@ -547,17 +548,17 @@
         renderProgress.classList.add('hidden');
       };
 
-      recorder.start(250); // Har 250ms da bufer olinadi
+      recorder.start(250);
       audio.currentTime = 0;
       audio.playbackRate = 1.0;
       await audio.play();
 
       let isFinished = false;
+      let smoothScrollY = 0;
 
       function drawFrame() {
         if (isFinished) return;
 
-        // Aniq to'xtash: audio endCutTime ga yetganda 600ms kutiladi
         if (audio.currentTime >= endCutTime || audio.ended) {
           isFinished = true;
           audio.pause();
@@ -577,61 +578,102 @@
         progressBar.style.width = `${percent}%`;
         progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni yopmang)`;
 
-        // 1. Fon chizish
+        // 1. DUXOBA FON (Vignette Radial Gradient - Monotonlikni yo'qotadi)
         if (bgImageObj) {
           ctx.drawImage(bgImageObj, 0, 0, 1080, 1920);
-          ctx.fillStyle = "rgba(0,0,0,0.5)";
+          ctx.fillStyle = "rgba(0,0,0,0.52)";
           ctx.fillRect(0, 0, 1080, 1920);
         } else {
-          ctx.fillStyle = selectedBgColor;
+          // Chuqur radial gradient
+          const radial = ctx.createRadialGradient(540, 960, 100, 540, 960, 1000);
+          radial.addColorStop(0, selectedBgColor);
+          radial.addColorStop(1, "#07080b");
+          ctx.fillStyle = radial;
           ctx.fillRect(0, 0, 1080, 1920);
         }
 
-        // 2. Qo'shiq va ijrochi nomi
+        // 2. TREK NOMI VA IJROCHI (Apple Music Spotify uslubi)
         ctx.fillStyle = "#ffffff";
-        ctx.font = "900 68px Montserrat, sans-serif";
+        ctx.font = "900 80px Montserrat, sans-serif";
         ctx.textAlign = "left";
-        ctx.fillText(trackTitle.value || "Korolmaslar", 100, 220);
+        ctx.fillText(artistName.value || "Manuş Baba", 100, 230);
 
-        ctx.fillStyle = "#a1a1aa";
-        ctx.font = "700 42px Montserrat, sans-serif";
-        ctx.fillText(artistName.value || "Afruza", 100, 280);
+        ctx.fillStyle = "#cbd5e1";
+        ctx.font = "700 46px Montserrat, sans-serif";
+        ctx.fillText(trackTitle.value || "Bu Havada Gidilmez", 100, 300);
 
-        // 3. Faol satr
-        let curIdx = -1;
-        for (let i = 0; i < lyrics.length; i++) {
-          if (lyrics[i].time !== null && audio.currentTime >= lyrics[i].time) curIdx = i;
+        // Jonli Mini Equalizer Chiziqchalari (Trek yonida tebranadi)
+        const waveTime = Date.now() * 0.008;
+        ctx.fillStyle = "#10b981"; // Zumrad yashil
+        for (let b = 0; b < 4; b++) {
+          const barH = 10 + Math.sin(waveTime + b * 1.4) * 8;
+          ctx.fillRect(100 + (ctx.measureText(trackTitle.value || "Bu Havada Gidilmez").width) + 24 + (b * 10), 282 - barH, 5, barH);
         }
 
-        const yBase = 1000 + parseInt(posSlider.value) * 3;
+        // 3. FAOL SATRNI ANIKLASH
+        let curIdx = 0;
+        for (let i = 0; i < lyrics.length; i++) {
+          if (lyrics[i].time !== null && audio.currentTime >= lyrics[i].time) {
+            curIdx = i;
+          }
+        }
+
+        // SILLIQ LERP SCROLLING (Sakrashni yo'qotuvchi muzdek harakat formulasi)
+        const targetScrollY = curIdx * 150;
+        smoothScrollY += (targetScrollY - smoothScrollY) * 0.085; // 60 FPS silliq easing
+
+        const yBase = 1050 + parseInt(posSlider.value) * 3;
         const fontPx = parseInt(fontSizeSlider.value) * 2.4;
 
+        // 4. SATRLARNI 3D CHUQURLIK BILAN CHIZISH
         lyrics.forEach((item, idx) => {
-          const diff = idx - curIdx;
-          const yPos = yBase + (diff * 140);
+          const itemTargetY = yBase + (idx * 150) - smoothScrollY;
 
-          if (yPos > 400 && yPos < 1700) {
+          // Faqat ekrandagi ko'rinadigan qismni chizamiz:
+          if (itemTargetY > 400 && itemTargetY < 1720) {
+            const distanceFromCenter = Math.abs(itemTargetY - yBase);
+            
             if (idx === curIdx) {
+              // YORQIN NEON SOYA BILAN PORLASH
+              ctx.save();
               ctx.fillStyle = "#ffffff";
-              ctx.font = `900 ${fontPx + 8}px Montserrat, sans-serif`;
-              ctx.shadowColor = "rgba(0,0,0,0.9)";
-              ctx.shadowBlur = 20;
-              ctx.fillText(item.text, 100, yPos);
-              ctx.shadowBlur = 0;
+              ctx.font = `900 ${fontPx + 10}px Montserrat, sans-serif`;
+              ctx.shadowColor = "rgba(255, 255, 255, 0.9)";
+              ctx.shadowBlur = 28;
+              ctx.fillText(item.text, 100, itemTargetY);
+              ctx.restore();
             } else {
-              ctx.fillStyle = "rgba(161, 161, 170, 0.35)";
-              ctx.font = `700 ${fontPx}px Montserrat, sans-serif`;
-              ctx.fillText(item.text, 100, yPos);
+              // UZOQDAGI SATRLAR XIRA VA TUMANLI (Depth of field)
+              const alpha = Math.max(0.12, 1 - (distanceFromCenter / 650));
+              ctx.save();
+              ctx.fillStyle = `rgba(148, 163, 184, ${alpha.toFixed(2)})`;
+              ctx.font = `800 ${fontPx}px Montserrat, sans-serif`;
+              ctx.fillText(item.text, 100, itemTargetY);
+              ctx.restore();
             }
           }
         });
 
-        // 4. Brend
-        ctx.fillStyle = "rgba(255,255,255,0.3)";
-        ctx.font = "600 24px monospace";
-        ctx.fillText("9:16 60FPS HD", 100, 1840);
+        // 5. SPOTIFY VAQT PROGRESS BARI (Tomoshabinni videoni oxirigacha ushlab turadi!)
+        const progWidth = 880;
+        const currentProgress = Math.min(1, audio.currentTime / endCutTime);
+        
+        ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+        ctx.beginPath();
+        ctx.roundRect(100, 1810, progWidth, 6, 3);
+        ctx.fill();
+
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.roundRect(100, 1810, progWidth * currentProgress, 6, 3);
+        ctx.fill();
+
+        // 6. PASTKI TIKTOK BRENDINGI
+        ctx.fillStyle = "rgba(255,255,255,0.4)";
+        ctx.font = "700 24px monospace";
+        ctx.fillText("9:16 60FPS HD", 100, 1855);
         ctx.textAlign = "right";
-        ctx.fillText("@MS.MUSIC", 980, 1840);
+        ctx.fillText("@MS.MUSIC", 980, 1855);
 
         requestAnimationFrame(drawFrame);
       }
@@ -640,4 +682,4 @@
     });
   </script>
 </body>
-  </html>
+</html>
