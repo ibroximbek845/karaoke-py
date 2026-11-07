@@ -29,28 +29,30 @@
       transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .lyric-row {
-      transition: all 0.35s ease;
-      text-align: center !important;
+      transition: color 0.25s ease, opacity 0.25s ease;
+      text-align: left !important;
       width: 100%;
       max-width: 100%;
-      padding: 0 8px;
-      overflow-wrap: anywhere;
+      padding: 0;
+      overflow-wrap: break-word;
       word-break: normal;
-      line-height: 1.22;
+      line-height: 1.28;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
+      letter-spacing: -0.025em;
     }
     .lyric-active {
       opacity: 1 !important;
-      transform: scale(1.04);
+      transform: none;
       color: #ffffff !important;
-      text-shadow: 0 0 25px rgba(255,255,255,0.85);
+      text-shadow: none !important;
     }
     .lyric-inactive {
-      opacity: 0.28;
-      color: #94a3b8;
+      opacity: 0.48;
+      color: #c4cad4;
+      text-shadow: none !important;
     }
   </style>
 </head>
@@ -204,7 +206,7 @@
       </div>
 
       <div id="previewCard" class="w-full aspect-[9/16] max-h-[520px] rounded-2xl p-6 flex flex-col justify-between border border-gray-800 shadow-2xl relative overflow-hidden bg-[#1f0814] bg-cover bg-center transition-all duration-300">
-        <div id="bgOverlay" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] hidden"></div>
+        <div id="bgOverlay" class="absolute inset-0 bg-black/20 hidden"></div>
         
         <div class="z-10 text-left">
           <h3 id="prevArtist" class="text-2xl font-black text-white leading-tight drop-shadow-md">Manuş Baba</h3>
@@ -449,13 +451,13 @@
 
     function renderLivePreview() {
       prevArtist.innerText = artistName.value.trim() || "Manuş Baba";
-      prevTitle.innerHTML = `<span>${trackTitle.value.trim() || "Bu Havada Gidilmez"}</span><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>`;
+      prevTitle.innerHTML = `<span>${trackTitle.value.trim() || "Bu Havada Gidilmez"}</span><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>`;
       const size = Math.min(parseInt(fontSizeSlider.value, 10), 24);
       previewLyricsContainer.innerHTML = '';
       lyrics.forEach((line, idx) => {
         const row = document.createElement('div');
         row.id = `prev-line-${idx}`;
-        row.className = 'lyric-row lyric-inactive leading-snug';
+        row.className = 'lyric-row lyric-inactive';
         row.style.fontSize = `${size}px`;
         row.textContent = line.text;
         previewLyricsContainer.appendChild(row);
@@ -599,62 +601,63 @@
         progressBar.style.width = `${percent}%`;
         progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni yopmang)`;
 
-        // 1. DUXOBA FON (Vignette Radial Gradient - Monotonlikni yo'qotadi)
+        // 1. BACKGROUND — tanlangan rangni qora bilan bosib yubormaslik
         if (bgImageObj) {
           ctx.drawImage(bgImageObj, 0, 0, 1080, 1920);
-          ctx.fillStyle = "rgba(0,0,0,0.52)";
+          ctx.fillStyle = "rgba(5,8,14,0.22)";
+          ctx.fillRect(0, 0, 1080, 1920);
+          const readability = ctx.createLinearGradient(0, 0, 0, 1920);
+          readability.addColorStop(0, "rgba(0,0,0,0.12)");
+          readability.addColorStop(0.5, "rgba(0,0,0,0.04)");
+          readability.addColorStop(1, "rgba(0,0,0,0.22)");
+          ctx.fillStyle = readability;
           ctx.fillRect(0, 0, 1080, 1920);
         } else {
-          // Chuqur radial gradient
-          const radial = ctx.createRadialGradient(540, 960, 100, 540, 960, 1000);
-          radial.addColorStop(0, selectedBgColor);
-          radial.addColorStop(1, "#07080b");
-          ctx.fillStyle = radial;
+          ctx.fillStyle = selectedBgColor;
+          ctx.fillRect(0, 0, 1080, 1920);
+          const shade = ctx.createLinearGradient(0, 0, 0, 1920);
+          shade.addColorStop(0, "rgba(0,0,0,0.10)");
+          shade.addColorStop(0.5, "rgba(0,0,0,0.02)");
+          shade.addColorStop(1, "rgba(0,0,0,0.18)");
+          ctx.fillStyle = shade;
           ctx.fillRect(0, 0, 1080, 1920);
         }
 
-        // 2. PREMIUM TRACK HEADER
+        // 2. SPOTIFY-INSPIRED TRACK INFO — sodda, chapga tekislangan
         const artist = (artistName.value || "Manuş Baba").trim();
         const track = (trackTitle.value || "Bu Havada Gidilmez").trim();
         ctx.save();
         ctx.textAlign = "left";
+        ctx.shadowBlur = 0;
         ctx.fillStyle = "rgba(255,255,255,0.58)";
-        ctx.font = "800 22px Inter, sans-serif";
-        ctx.fillText("NOW PLAYING  •  VIBESTUDIO", 100, 150);
+        ctx.font = "600 24px Arial, sans-serif";
+        ctx.fillText("NOW PLAYING", 100, 150);
 
-        let artistFont = 76;
-        ctx.font = `900 ${artistFont}px Montserrat, sans-serif`;
-        while (ctx.measureText(artist).width > 880 && artistFont > 46) {
+        let artistFont = 72;
+        ctx.font = `700 ${artistFont}px Arial, sans-serif`;
+        while (ctx.measureText(artist).width > 880 && artistFont > 42) {
           artistFont -= 2;
-          ctx.font = `900 ${artistFont}px Montserrat, sans-serif`;
+          ctx.font = `700 ${artistFont}px Arial, sans-serif`;
         }
         ctx.fillStyle = "#ffffff";
-        ctx.shadowColor = "rgba(0,0,0,0.35)";
-        ctx.shadowBlur = 18;
         ctx.fillText(artist, 100, 250, 880);
 
-        let trackFont = 46;
-        ctx.font = `800 ${trackFont}px Inter, sans-serif`;
-        while (ctx.measureText(track).width > 880 && trackFont > 30) {
+        let trackFont = 42;
+        ctx.font = `600 ${trackFont}px Arial, sans-serif`;
+        while (ctx.measureText(track).width > 880 && trackFont > 28) {
           trackFont -= 2;
-          ctx.font = `800 ${trackFont}px Inter, sans-serif`;
+          ctx.font = `600 ${trackFont}px Arial, sans-serif`;
         }
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "#d7dce5";
-        ctx.fillText(track, 100, 320, 880);
+        ctx.fillStyle = "rgba(255,255,255,0.72)";
+        ctx.fillText(track, 100, 315, 880);
 
-        const waveTime = Date.now() * 0.008;
-        const trackWidth = Math.min(ctx.measureText(track).width, 760);
-        ctx.fillStyle = "#fb7185";
-        for (let b = 0; b < 5; b++) {
-          const barH = 8 + Math.abs(Math.sin(waveTime + b * 0.9)) * 17;
-          ctx.fillRect(100 + trackWidth + 24 + b * 11, 310 - barH, 5, barH);
-        }
-        const headerGrad = ctx.createLinearGradient(100, 355, 980, 355);
-        headerGrad.addColorStop(0, "rgba(244,63,94,0.85)");
-        headerGrad.addColorStop(1, "rgba(244,63,94,0)");
-        ctx.fillStyle = headerGrad;
-        ctx.fillRect(100, 365, 880, 2);
+        ctx.fillStyle = "#1ed760";
+        ctx.beginPath();
+        ctx.arc(100, 370, 5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,0.36)";
+        ctx.font = "600 20px Arial, sans-serif";
+        ctx.fillText("LYRICS", 120, 377);
         ctx.restore();
 
         // 3. FAOL SATRNI ANIKLASH
@@ -706,31 +709,64 @@
         const yBase = 1050 + parseInt(posSlider.value) * 3;
         ctx.textAlign = "center";
 
-        // Har bir qo‘shiq jumlasi bitta mustaqil blok; faqat shu jumlaning o‘zi ikki qatorga bo‘linadi.
+        // Spotify uslubi: chapdan boshlanadigan, toza va tartibli satrlar.
+        const fontPx = Math.max(42, Math.min(parseInt(fontSizeSlider.value, 10) * 2.15, 68));
+        const rowGap = 205;
+        const targetScrollY = curIdx * rowGap;
+        smoothScrollY += (targetScrollY - smoothScrollY) * 0.085;
+
+        function wrapLyric(text, font, maxWidth, maxLines = 2) {
+          ctx.font = font;
+          const words = String(text).trim().split(/\s+/);
+          const lines = [];
+          let line = "";
+          for (const word of words) {
+            const test = line ? line + " " + word : word;
+            if (ctx.measureText(test).width <= maxWidth || !line) line = test;
+            else { lines.push(line); line = word; }
+          }
+          if (line) lines.push(line);
+          if (lines.length <= maxLines) return lines;
+
+          // Juda uzun jumlalar ham 2 qatordan oshmaydi: shriftni moslashtiramiz.
+          let size = fontPx;
+          let fitted = [];
+          while (size >= 30) {
+            ctx.font = `700 ${size}px Arial, sans-serif`;
+            fitted = [];
+            let current = "";
+            for (const word of words) {
+              const test = current ? current + " " + word : word;
+              if (ctx.measureText(test).width <= maxWidth || !current) current = test;
+              else { fitted.push(current); current = word; }
+            }
+            if (current) fitted.push(current);
+            if (fitted.length <= maxLines) return fitted;
+            size -= 2;
+          }
+          return [fitted.slice(0, -1).join(" "), fitted[fitted.length - 1] || ""];
+        }
+
+        const yBase = 1050 + parseInt(posSlider.value, 10) * 3;
+        const leftX = 112;
         lyrics.forEach((item, idx) => {
           const itemTargetY = yBase + (idx * rowGap) - smoothScrollY;
-          if (itemTargetY > 350 && itemTargetY < 1760) {
-            const distanceFromCenter = Math.abs(itemTargetY - yBase);
+          if (itemTargetY > 390 && itemTargetY < 1740) {
             const active = idx === curIdx;
-            const drawFont = active ? `900 ${fontPx}px Montserrat, sans-serif` : `800 ${fontPx * 0.88}px Montserrat, sans-serif`;
-            const lines = wrapLyric(item.text, drawFont, 880, 2);
-            const lineHeight = active ? fontPx * 1.12 : fontPx;
+            const drawSize = active ? fontPx : Math.round(fontPx * 0.78);
+            const drawFont = `700 ${drawSize}px Arial, sans-serif`;
+            const lines = wrapLyric(item.text, drawFont, 850, 2);
+            const lineHeight = drawSize * 1.22;
             const firstY = itemTargetY - ((lines.length - 1) * lineHeight) / 2;
 
             ctx.save();
             ctx.font = drawFont;
-            ctx.textAlign = "center";
+            ctx.textAlign = "left";
             ctx.textBaseline = "middle";
-            if (active) {
-              ctx.fillStyle = "#ffffff";
-              ctx.shadowColor = "rgba(255,255,255,0.75)";
-              ctx.shadowBlur = 22;
-            } else {
-              const alpha = Math.max(0.14, 1 - distanceFromCenter / 700);
-              ctx.fillStyle = `rgba(148,163,184,${alpha.toFixed(2)})`;
-            }
+            ctx.shadowBlur = 0;
+            ctx.fillStyle = active ? "#ffffff" : "rgba(235,239,245,0.58)";
             lines.forEach((line, lineIndex) => {
-              ctx.fillText(line, 540, firstY + lineIndex * lineHeight, 880);
+              ctx.fillText(line, leftX, firstY + lineIndex * lineHeight, 850);
             });
             ctx.restore();
           }
