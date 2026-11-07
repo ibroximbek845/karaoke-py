@@ -33,15 +33,12 @@
       text-align: left !important;
       width: 100%;
       max-width: 100%;
-      padding: 0;
       overflow-wrap: break-word;
-      word-break: normal;
       line-height: 1.28;
       display: -webkit-box;
       -webkit-box-orient: vertical;
       -webkit-line-clamp: 2;
       overflow: hidden;
-      letter-spacing: -0.025em;
     }
     .lyric-active {
       opacity: 1 !important;
@@ -50,7 +47,7 @@
       text-shadow: none !important;
     }
     .lyric-inactive {
-      opacity: 0.48;
+      opacity: 0.52;
       color: #c4cad4;
       text-shadow: none !important;
     }
@@ -206,7 +203,7 @@
       </div>
 
       <div id="previewCard" class="w-full aspect-[9/16] max-h-[520px] rounded-2xl p-6 flex flex-col justify-between border border-gray-800 shadow-2xl relative overflow-hidden bg-[#1f0814] bg-cover bg-center transition-all duration-300">
-        <div id="bgOverlay" class="absolute inset-0 bg-black/20 hidden"></div>
+        <div id="bgOverlay" class="absolute inset-0 bg-black/40 backdrop-blur-[2px] hidden"></div>
         
         <div class="z-10 text-left">
           <h3 id="prevArtist" class="text-2xl font-black text-white leading-tight drop-shadow-md">Manuş Baba</h3>
@@ -451,17 +448,11 @@
 
     function renderLivePreview() {
       prevArtist.innerText = artistName.value.trim() || "Manuş Baba";
-      prevTitle.innerHTML = `<span>${trackTitle.value.trim() || "Bu Havada Gidilmez"}</span><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400"></span>`;
-      const size = Math.min(parseInt(fontSizeSlider.value, 10), 24);
-      previewLyricsContainer.innerHTML = '';
-      lyrics.forEach((line, idx) => {
-        const row = document.createElement('div');
-        row.id = `prev-line-${idx}`;
-        row.className = 'lyric-row lyric-inactive';
-        row.style.fontSize = `${size}px`;
-        row.textContent = line.text;
-        previewLyricsContainer.appendChild(row);
-      });
+      prevTitle.innerHTML = `<span>${trackTitle.value.trim() || "Bu Havada Gidilmez"}</span><span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>`;
+      const size = fontSizeSlider.value;
+      previewLyricsContainer.innerHTML = lyrics.map((l, idx) => `
+        <div id="prev-line-${idx}" style="font-size: ${size}px;" class="lyric-row lyric-inactive leading-snug">${l.text}</div>
+      `).join('');
     }
 
     function updatePreviewScroll(currTime) {
@@ -476,12 +467,7 @@
           if (!el) return;
           el.className = idx === curIdx ? 'lyric-row lyric-active leading-snug' : 'lyric-row lyric-inactive leading-snug';
         });
-        const activeRow = document.getElementById(`prev-line-${curIdx}`);
-        if (activeRow) {
-          const viewportCenter = lyricsViewport.clientHeight / 2;
-          const rowCenter = activeRow.offsetTop + activeRow.offsetHeight / 2;
-          previewLyricsContainer.style.transform = `translateY(${viewportCenter - rowCenter}px)`;
-        }
+        previewLyricsContainer.style.transform = `translateY(-${curIdx * 48}px)`;
       }
     }
 
@@ -601,64 +587,37 @@
         progressBar.style.width = `${percent}%`;
         progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni yopmang)`;
 
-        // 1. BACKGROUND — tanlangan rangni qora bilan bosib yubormaslik
+        // 1. DUXOBA FON (Vignette Radial Gradient - Monotonlikni yo'qotadi)
         if (bgImageObj) {
           ctx.drawImage(bgImageObj, 0, 0, 1080, 1920);
-          ctx.fillStyle = "rgba(5,8,14,0.22)";
-          ctx.fillRect(0, 0, 1080, 1920);
-          const readability = ctx.createLinearGradient(0, 0, 0, 1920);
-          readability.addColorStop(0, "rgba(0,0,0,0.12)");
-          readability.addColorStop(0.5, "rgba(0,0,0,0.04)");
-          readability.addColorStop(1, "rgba(0,0,0,0.22)");
-          ctx.fillStyle = readability;
+          ctx.fillStyle = "rgba(0,0,0,0.18)";
           ctx.fillRect(0, 0, 1080, 1920);
         } else {
-          ctx.fillStyle = selectedBgColor;
-          ctx.fillRect(0, 0, 1080, 1920);
-          const shade = ctx.createLinearGradient(0, 0, 0, 1920);
-          shade.addColorStop(0, "rgba(0,0,0,0.10)");
-          shade.addColorStop(0.5, "rgba(0,0,0,0.02)");
-          shade.addColorStop(1, "rgba(0,0,0,0.18)");
-          ctx.fillStyle = shade;
+          // Chuqur radial gradient
+          const radial = ctx.createRadialGradient(540, 960, 100, 540, 960, 1000);
+          radial.addColorStop(0, selectedBgColor);
+          radial.addColorStop(1, "#171923");
+          ctx.fillStyle = radial;
           ctx.fillRect(0, 0, 1080, 1920);
         }
 
-        // 2. SPOTIFY-INSPIRED TRACK INFO — sodda, chapga tekislangan
-        const artist = (artistName.value || "Manuş Baba").trim();
-        const track = (trackTitle.value || "Bu Havada Gidilmez").trim();
-        ctx.save();
-        ctx.textAlign = "left";
-        ctx.shadowBlur = 0;
-        ctx.fillStyle = "rgba(255,255,255,0.58)";
-        ctx.font = "600 24px Arial, sans-serif";
-        ctx.fillText("NOW PLAYING", 100, 150);
-
-        let artistFont = 72;
-        ctx.font = `700 ${artistFont}px Arial, sans-serif`;
-        while (ctx.measureText(artist).width > 880 && artistFont > 42) {
-          artistFont -= 2;
-          ctx.font = `700 ${artistFont}px Arial, sans-serif`;
-        }
+        // 2. TREK NOMI VA IJROCHI (Apple Music Spotify uslubi)
         ctx.fillStyle = "#ffffff";
-        ctx.fillText(artist, 100, 250, 880);
+        ctx.font = "900 80px Montserrat, sans-serif";
+        ctx.textAlign = "left";
+        ctx.fillText(artistName.value || "Manuş Baba", 100, 230);
 
-        let trackFont = 42;
-        ctx.font = `600 ${trackFont}px Arial, sans-serif`;
-        while (ctx.measureText(track).width > 880 && trackFont > 28) {
-          trackFont -= 2;
-          ctx.font = `600 ${trackFont}px Arial, sans-serif`;
+        ctx.fillStyle = "#cbd5e1";
+        ctx.font = "700 46px Montserrat, sans-serif";
+        ctx.fillText(trackTitle.value || "Bu Havada Gidilmez", 100, 300);
+
+        // Jonli Mini Equalizer Chiziqchalari (Trek yonida tebranadi)
+        const waveTime = Date.now() * 0.008;
+        ctx.fillStyle = "#10b981"; // Zumrad yashil
+        for (let b = 0; b < 4; b++) {
+          const barH = 10 + Math.sin(waveTime + b * 1.4) * 8;
+          ctx.fillRect(100 + (ctx.measureText(trackTitle.value || "Bu Havada Gidilmez").width) + 24 + (b * 10), 282 - barH, 5, barH);
         }
-        ctx.fillStyle = "rgba(255,255,255,0.72)";
-        ctx.fillText(track, 100, 315, 880);
-
-        ctx.fillStyle = "#1ed760";
-        ctx.beginPath();
-        ctx.arc(100, 370, 5, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.fillStyle = "rgba(255,255,255,0.36)";
-        ctx.font = "600 20px Arial, sans-serif";
-        ctx.fillText("LYRICS", 120, 377);
-        ctx.restore();
 
         // 3. FAOL SATRNI ANIKLASH
         let curIdx = 0;
@@ -668,54 +627,15 @@
           }
         }
 
-        // Har bir jumla alohida qoladi; uzun jumla ko‘pi bilan 2 qatorga o‘raladi.
-        const fontPx = Math.max(48, Math.min(parseInt(fontSizeSlider.value, 10) * 2.8, 82));
-        const rowGap = 230;
-        const targetScrollY = curIdx * rowGap;
+        // SILLIQ LERP SCROLLING — oldingi vaqt/sinxronlash mexanizmi saqlanadi
+        const targetScrollY = curIdx * 150;
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.085;
-
-        function wrapLyric(text, font, maxWidth, maxLines = 2) {
-          ctx.font = font;
-          const words = String(text).trim().split(/\s+/);
-          const lines = [];
-          let line = "";
-          for (const word of words) {
-            const test = line ? line + " " + word : word;
-            if (ctx.measureText(test).width <= maxWidth || !line) {
-              line = test;
-            } else {
-              lines.push(line);
-              line = word;
-            }
-          }
-          if (line) lines.push(line);
-          if (lines.length <= maxLines) return lines;
-
-          // Juda uzun matn bo‘lsa ham ikki qator ichiga sig‘dirish uchun shriftni kichraytiramiz.
-          let smaller = Math.max(28, parseInt(font.match(/\d+(?=px)/)?.[0] || fontPx, 10) * 0.78);
-          ctx.font = font.replace(/\d+(?=px)/, String(smaller));
-          const compact = [];
-          let current = "";
-          for (const word of words) {
-            const test = current ? current + " " + word : word;
-            if (ctx.measureText(test).width <= maxWidth || !current) current = test;
-            else { compact.push(current); current = word; }
-          }
-          if (current) compact.push(current);
-          if (compact.length <= maxLines) return compact;
-          return [compact.slice(0, compact.length - 1).join(" "), compact[compact.length - 1]];
-        }
 
         const yBase = 1050 + parseInt(posSlider.value) * 3;
-        ctx.textAlign = "center";
+        const fontPx = parseInt(fontSizeSlider.value) * 2.4;
 
-        // Spotify uslubi: chapdan boshlanadigan, toza va tartibli satrlar.
-        const fontPx = Math.max(42, Math.min(parseInt(fontSizeSlider.value, 10) * 2.15, 68));
-        const rowGap = 205;
-        const targetScrollY = curIdx * rowGap;
-        smoothScrollY += (targetScrollY - smoothScrollY) * 0.085;
-
-        function wrapLyric(text, font, maxWidth, maxLines = 2) {
+        // Spotifyga o‘xshash tartibli chap tekislik; har bir jumla mustaqil.
+        function wrapLyricLine(text, font, maxWidth) {
           ctx.font = font;
           const words = String(text).trim().split(/\s+/);
           const lines = [];
@@ -726,52 +646,41 @@
             else { lines.push(line); line = word; }
           }
           if (line) lines.push(line);
-          if (lines.length <= maxLines) return lines;
-
-          // Juda uzun jumlalar ham 2 qatordan oshmaydi: shriftni moslashtiramiz.
-          let size = fontPx;
-          let fitted = [];
-          while (size >= 30) {
-            ctx.font = `700 ${size}px Arial, sans-serif`;
-            fitted = [];
-            let current = "";
-            for (const word of words) {
-              const test = current ? current + " " + word : word;
-              if (ctx.measureText(test).width <= maxWidth || !current) current = test;
-              else { fitted.push(current); current = word; }
-            }
-            if (current) fitted.push(current);
-            if (fitted.length <= maxLines) return fitted;
-            size -= 2;
-          }
-          return [fitted.slice(0, -1).join(" "), fitted[fitted.length - 1] || ""];
+          return lines;
         }
 
-        const yBase = 1050 + parseInt(posSlider.value, 10) * 3;
-        const leftX = 112;
         lyrics.forEach((item, idx) => {
-          const itemTargetY = yBase + (idx * rowGap) - smoothScrollY;
-          if (itemTargetY > 390 && itemTargetY < 1740) {
+          const itemTargetY = yBase + (idx * 150) - smoothScrollY;
+          if (itemTargetY > 400 && itemTargetY < 1720) {
             const active = idx === curIdx;
-            const drawSize = active ? fontPx : Math.round(fontPx * 0.78);
-            const drawFont = `700 ${drawSize}px Arial, sans-serif`;
-            const lines = wrapLyric(item.text, drawFont, 850, 2);
-            const lineHeight = drawSize * 1.22;
-            const firstY = itemTargetY - ((lines.length - 1) * lineHeight) / 2;
+            let size = active ? fontPx : fontPx * 0.88;
+            let font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
+            let lines = wrapLyricLine(item.text, font, 880);
 
+            // Uzun jumlani ikki qatordan oshirmaymiz; zarur bo‘lsa shriftni moslaymiz.
+            while (lines.length > 2 && size > 34) {
+              size -= 2;
+              font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
+              lines = wrapLyricLine(item.text, font, 880);
+            }
+            if (lines.length > 2) {
+              lines = [lines.slice(0, -1).join(" "), lines[lines.length - 1]];
+            }
+
+            const lineHeight = size * 1.2;
+            const firstY = itemTargetY - ((lines.length - 1) * lineHeight) / 2;
             ctx.save();
-            ctx.font = drawFont;
+            ctx.font = font;
             ctx.textAlign = "left";
             ctx.textBaseline = "middle";
             ctx.shadowBlur = 0;
-            ctx.fillStyle = active ? "#ffffff" : "rgba(235,239,245,0.58)";
+            ctx.fillStyle = active ? "#ffffff" : "rgba(196,204,216,0.72)";
             lines.forEach((line, lineIndex) => {
-              ctx.fillText(line, leftX, firstY + lineIndex * lineHeight, 850);
+              ctx.fillText(line, 100, firstY + lineIndex * lineHeight, 880);
             });
             ctx.restore();
           }
         });
-        ctx.textAlign = "left";
 
         // 5. SPOTIFY VAQT PROGRESS BARI (Tomoshabinni videoni oxirigacha ushlab turadi!)
         const progWidth = 880;
