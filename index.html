@@ -613,23 +613,49 @@
           ctx.fillRect(0, 0, 1080, 1920);
         }
 
-        // 2. TREK NOMI VA IJROCHI (Apple Music Spotify uslubi)
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "900 80px Montserrat, sans-serif";
+        // 2. PREMIUM TRACK HEADER
+        const artist = (artistName.value || "Manuş Baba").trim();
+        const track = (trackTitle.value || "Bu Havada Gidilmez").trim();
+        ctx.save();
         ctx.textAlign = "left";
-        ctx.fillText(artistName.value || "Manuş Baba", 100, 230);
+        ctx.fillStyle = "rgba(255,255,255,0.58)";
+        ctx.font = "800 22px Inter, sans-serif";
+        ctx.fillText("NOW PLAYING  •  VIBESTUDIO", 100, 150);
 
-        ctx.fillStyle = "#cbd5e1";
-        ctx.font = "700 46px Montserrat, sans-serif";
-        ctx.fillText(trackTitle.value || "Bu Havada Gidilmez", 100, 300);
-
-        // Jonli Mini Equalizer Chiziqchalari (Trek yonida tebranadi)
-        const waveTime = Date.now() * 0.008;
-        ctx.fillStyle = "#10b981"; // Zumrad yashil
-        for (let b = 0; b < 4; b++) {
-          const barH = 10 + Math.sin(waveTime + b * 1.4) * 8;
-          ctx.fillRect(100 + (ctx.measureText(trackTitle.value || "Bu Havada Gidilmez").width) + 24 + (b * 10), 282 - barH, 5, barH);
+        let artistFont = 76;
+        ctx.font = `900 ${artistFont}px Montserrat, sans-serif`;
+        while (ctx.measureText(artist).width > 880 && artistFont > 46) {
+          artistFont -= 2;
+          ctx.font = `900 ${artistFont}px Montserrat, sans-serif`;
         }
+        ctx.fillStyle = "#ffffff";
+        ctx.shadowColor = "rgba(0,0,0,0.35)";
+        ctx.shadowBlur = 18;
+        ctx.fillText(artist, 100, 250, 880);
+
+        let trackFont = 46;
+        ctx.font = `800 ${trackFont}px Inter, sans-serif`;
+        while (ctx.measureText(track).width > 880 && trackFont > 30) {
+          trackFont -= 2;
+          ctx.font = `800 ${trackFont}px Inter, sans-serif`;
+        }
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "#d7dce5";
+        ctx.fillText(track, 100, 320, 880);
+
+        const waveTime = Date.now() * 0.008;
+        const trackWidth = Math.min(ctx.measureText(track).width, 760);
+        ctx.fillStyle = "#fb7185";
+        for (let b = 0; b < 5; b++) {
+          const barH = 8 + Math.abs(Math.sin(waveTime + b * 0.9)) * 17;
+          ctx.fillRect(100 + trackWidth + 24 + b * 11, 310 - barH, 5, barH);
+        }
+        const headerGrad = ctx.createLinearGradient(100, 355, 980, 355);
+        headerGrad.addColorStop(0, "rgba(244,63,94,0.85)");
+        headerGrad.addColorStop(1, "rgba(244,63,94,0)");
+        ctx.fillStyle = headerGrad;
+        ctx.fillRect(100, 365, 880, 2);
+        ctx.restore();
 
         // 3. FAOL SATRNI ANIKLASH
         let curIdx = 0;
