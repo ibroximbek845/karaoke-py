@@ -666,8 +666,8 @@
         }
 
         // Har bir jumla alohida qoladi; uzun jumla ko‘pi bilan 2 qatorga o‘raladi.
-        const fontPx = Math.min(parseInt(fontSizeSlider.value, 10) * 2.0, 54);
-        const rowGap = 190;
+        const fontPx = Math.max(48, Math.min(parseInt(fontSizeSlider.value, 10) * 2.8, 82));
+        const rowGap = 230;
         const targetScrollY = curIdx * rowGap;
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.085;
 
