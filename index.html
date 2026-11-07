@@ -647,7 +647,7 @@
 
         function wrapLyric(text, font, maxWidth, maxLines = 2) {
           ctx.font = font;
-          const words = String(text).trim().split(/\\s+/);
+          const words = String(text).trim().split(/\s+/);
           const lines = [];
           let line = "";
           for (const word of words) {
@@ -663,8 +663,8 @@
           if (lines.length <= maxLines) return lines;
 
           // Juda uzun matn bo‘lsa ham ikki qator ichiga sig‘dirish uchun shriftni kichraytiramiz.
-          let smaller = Math.max(28, parseInt(font.match(/\\d+(?=px)/)?.[0] || fontPx, 10) * 0.78);
-          ctx.font = font.replace(/\\d+(?=px)/, String(smaller));
+          let smaller = Math.max(28, parseInt(font.match(/\d+(?=px)/)?.[0] || fontPx, 10) * 0.78);
+          ctx.font = font.replace(/\d+(?=px)/, String(smaller));
           const compact = [];
           let current = "";
           for (const word of words) {
