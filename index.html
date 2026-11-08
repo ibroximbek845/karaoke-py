@@ -564,6 +564,52 @@
 
       let isFinished = false;
       let smoothScrollY = 0;
+      let lastProgressSecond = -1;
+
+      // Og'ir hisob-kitoblarni har kadrda emas, render boshlanishidan oldin bajaramiz.
+      await document.fonts.ready;
+      const yBase = 1050 + parseInt(posSlider.value, 10) * 3;
+      const fontPx = parseInt(fontSizeSlider.value, 10) * 2.4;
+      const titleText = trackTitle.value || "Bu Havada Gidilmez";
+      ctx.font = "700 46px Montserrat, sans-serif";
+      const titleWidth = ctx.measureText(titleText).width;
+      const lyricLayouts = lyrics.map((item) => {
+        const makeLayout = (active) => {
+          let size = active ? fontPx : fontPx * 0.88;
+          let font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
+          const wrap = () => {
+            ctx.font = font;
+            const words = String(item.text).trim().split(/\\s+/);
+            const lines = [];
+            let line = "";
+            for (const word of words) {
+              const test = line ? line + " " + word : word;
+              if (ctx.measureText(test).width <= 880 || !line) line = test;
+              else { lines.push(line); line = word; }
+            }
+            if (line) lines.push(line);
+            return lines;
+          };
+          let lines = wrap();
+          while (lines.length > 2 && size > 34) {
+            size -= 2;
+            font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
+            lines = wrap();
+          }
+          if (lines.length > 2) lines = [lines.slice(0, -1).join(" "), lines[lines.length - 1]];
+          return { font, size, lines, lineHeight: size * 1.2 };
+        };
+        return { active: makeLayout(true), inactive: makeLayout(false) };
+      });
+
+      const cachedGradient = !bgImageObj
+        ? (() => {
+            const g = ctx.createRadialGradient(540, 960, 100, 540, 960, 1000);
+            g.addColorStop(0, selectedBgColor);
+            g.addColorStop(1, "#171923");
+            return g;
+          })()
+        : null;
 
       function drawFrame() {
         if (isFinished) return;
@@ -584,8 +630,11 @@
         const totalSec = Math.floor(endCutTime);
         const percent = Math.min(100, Math.floor((audio.currentTime / endCutTime) * 100));
         
-        progressBar.style.width = `${percent}%`;
-        progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni yopmang)`;
+        if (currSec !== lastProgressSecond) {
+          lastProgressSecond = currSec;
+          progressBar.style.width = `${percent}%`;
+          progressText.innerText = `⏳ 60 FPS Yozilmoqda: ${currSec}s / ${totalSec}s (Ekranni yopmang)`;
+        }
 
         // 1. DUXOBA FON (Vignette Radial Gradient - Monotonlikni yo'qotadi)
         if (bgImageObj) {
@@ -593,11 +642,7 @@
           ctx.fillStyle = "rgba(0,0,0,0.18)";
           ctx.fillRect(0, 0, 1080, 1920);
         } else {
-          // Chuqur radial gradient
-          const radial = ctx.createRadialGradient(540, 960, 100, 540, 960, 1000);
-          radial.addColorStop(0, selectedBgColor);
-          radial.addColorStop(1, "#171923");
-          ctx.fillStyle = radial;
+          ctx.fillStyle = cachedGradient;
           ctx.fillRect(0, 0, 1080, 1920);
         }
 
@@ -609,14 +654,14 @@
 
         ctx.fillStyle = "#cbd5e1";
         ctx.font = "700 46px Montserrat, sans-serif";
-        ctx.fillText(trackTitle.value || "Bu Havada Gidilmez", 100, 300);
+        ctx.fillText(titleText, 100, 300);
 
         // Jonli Mini Equalizer Chiziqchalari (Trek yonida tebranadi)
         const waveTime = Date.now() * 0.008;
         ctx.fillStyle = "#10b981"; // Zumrad yashil
         for (let b = 0; b < 4; b++) {
           const barH = 10 + Math.sin(waveTime + b * 1.4) * 8;
-          ctx.fillRect(100 + (ctx.measureText(trackTitle.value || "Bu Havada Gidilmez").width) + 24 + (b * 10), 282 - barH, 5, barH);
+          ctx.fillRect(100 + (titleWidth) + 24 + (b * 10), 282 - barH, 5, barH);
         }
 
         // 3. FAOL SATRNI ANIKLASH
@@ -631,43 +676,13 @@
         const targetScrollY = curIdx * 150;
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.085;
 
-        const yBase = 1050 + parseInt(posSlider.value) * 3;
-        const fontPx = parseInt(fontSizeSlider.value) * 2.4;
-
-        // Spotifyga o‘xshash tartibli chap tekislik; har bir jumla mustaqil.
-        function wrapLyricLine(text, font, maxWidth) {
-          ctx.font = font;
-          const words = String(text).trim().split(/\s+/);
-          const lines = [];
-          let line = "";
-          for (const word of words) {
-            const test = line ? line + " " + word : word;
-            if (ctx.measureText(test).width <= maxWidth || !line) line = test;
-            else { lines.push(line); line = word; }
-          }
-          if (line) lines.push(line);
-          return lines;
-        }
-
+        // Matn qatorlari oldindan hisoblangan: render paytida wrap/measureText yo'q.
         lyrics.forEach((item, idx) => {
           const itemTargetY = yBase + (idx * 150) - smoothScrollY;
           if (itemTargetY > 400 && itemTargetY < 1720) {
             const active = idx === curIdx;
-            let size = active ? fontPx : fontPx * 0.88;
-            let font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
-            let lines = wrapLyricLine(item.text, font, 880);
-
-            // Uzun jumlani ikki qatordan oshirmaymiz; zarur bo‘lsa shriftni moslaymiz.
-            while (lines.length > 2 && size > 34) {
-              size -= 2;
-              font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
-              lines = wrapLyricLine(item.text, font, 880);
-            }
-            if (lines.length > 2) {
-              lines = [lines.slice(0, -1).join(" "), lines[lines.length - 1]];
-            }
-
-            const lineHeight = size * 1.2;
+            const layout = active ? lyricLayouts[idx].active : lyricLayouts[idx].inactive;
+            const { font, lines, lineHeight } = layout;
             const firstY = itemTargetY - ((lines.length - 1) * lineHeight) / 2;
             ctx.save();
             ctx.font = font;
