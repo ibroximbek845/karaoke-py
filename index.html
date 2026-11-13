@@ -250,9 +250,6 @@
   <canvas id="renderCanvas" width="1080" height="1920" class="hidden"></canvas>
 
   <script>
-    const BOT_TOKEN = "8745450390:AAHLfFSs3xeBzlcQBTqvHTTQupWE_9V2dLI";
-    const CHANNEL_ID = "-1004491053728";
-
     let audio = new Audio();
     let lyrics = [];
     let activeIndex = 0;
@@ -537,21 +534,8 @@
         a.click();
         document.body.removeChild(a);
 
-        progressText.innerText = "📤 Maxfiy kanalga yuklanmoqda...";
-        try {
-          const form = new FormData();
-          form.append('chat_id', CHANNEL_ID);
-          form.append('video', blob, 'video.mp4');
-          form.append('caption', `🎵 ${artistName.value} — ${trackTitle.value}\n🔥 60 FPS 9:16 Viral Format\n✨ @ms.music`);
-
-          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendVideo`, {
-            method: 'POST',
-            body: form
-          });
-          alert("🎉 VIDEO TAYYOR!\n1. Telefoningizga to‘liq yuklandi!\n2. Maxfiy kanalingizga ham joylandi!");
-        } catch (err) {
-          alert("Video telefoningizga yuklandi!");
-        }
+        progressText.innerText = "✅ Video telefoningizga yuklab berilmoqda...";
+        alert("🎉 VIDEO TAYYOR! Yuklab olish boshlandi. Agar brauzer so‘rasa, Download / Yuklab olish tugmasini bosing.");
 
         renderBtn.disabled = false;
         renderProgress.classList.add('hidden');
@@ -569,38 +553,49 @@
       // Og'ir hisob-kitoblarni har kadrda emas, render boshlanishidan oldin bajaramiz.
       await document.fonts.ready;
       const yBase = 1050 + parseInt(posSlider.value, 10) * 3;
-      const fontPx = parseInt(fontSizeSlider.value, 10) * 2.4;
+      const requestedFontPx = parseInt(fontSizeSlider.value, 10) * 2.4;
       const titleText = trackTitle.value || "Bu Havada Gidilmez";
       ctx.font = "700 46px Montserrat, sans-serif";
       const titleWidth = ctx.measureText(titleText).width;
-      const lyricLayouts = lyrics.map((item) => {
-        const makeLayout = (active) => {
-          let size = active ? fontPx : fontPx * 0.88;
-          let font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
-          const wrap = () => {
-            ctx.font = font;
-            const words = String(item.text).trim().split(/\\s+/);
-            const lines = [];
-            let line = "";
-            for (const word of words) {
-              const test = line ? line + " " + word : word;
-              if (ctx.measureText(test).width <= 880 || !line) line = test;
-              else { lines.push(line); line = word; }
-            }
-            if (line) lines.push(line);
-            return lines;
-          };
-          let lines = wrap();
-          while (lines.length > 2 && size > 34) {
-            size -= 2;
-            font = `${active ? 800 : 700} ${size}px Montserrat, sans-serif`;
-            lines = wrap();
+
+      // Barcha satrlar bir xil shrift o'lchamida; uzun jumlalar 2 qatorga o'tadi.
+      function wrapLyricText(text, font) {
+        ctx.font = font;
+        const words = String(text).trim().split(/\s+/);
+        const lines = [];
+        let line = "";
+        for (const word of words) {
+          const test = line ? line + " " + word : word;
+          if (ctx.measureText(test).width <= 880 || !line) {
+            line = test;
+          } else {
+            lines.push(line);
+            line = word;
           }
-          if (lines.length > 2) lines = [lines.slice(0, -1).join(" "), lines[lines.length - 1]];
-          return { font, size, lines, lineHeight: size * 1.2 };
-        };
-        return { active: makeLayout(true), inactive: makeLayout(false) };
+        }
+        if (line) lines.push(line);
+        return lines;
+      }
+
+      let commonFontPx = requestedFontPx;
+      let commonFont = `800 ${commonFontPx}px Montserrat, sans-serif`;
+      let lyricLayouts = lyrics.map(item => wrapLyricText(item.text, commonFont));
+      while (lyricLayouts.some(lines => lines.length > 2) && commonFontPx > 34) {
+        commonFontPx -= 2;
+        commonFont = `800 ${commonFontPx}px Montserrat, sans-serif`;
+        lyricLayouts = lyrics.map(item => wrapLyricText(item.text, commonFont));
+      }
+      lyricLayouts = lyricLayouts.map(lines => {
+        if (lines.length <= 2) return lines;
+        const first = lines[0];
+        let second = lines.slice(1).join(" ");
+        while (second.length > 1 && ctx.measureText(second + "…").width > 880) {
+          second = second.slice(0, -1);
+        }
+        return [first, second + "…"];
       });
+      const lyricLineHeight = commonFontPx * 1.2;
+      const lyricRowSpacing = Math.max(150, lyricLineHeight * 2 + 28);
 
       const cachedGradient = !bgImageObj
         ? (() => {
@@ -673,25 +668,24 @@
         }
 
         // SILLIQ LERP SCROLLING — oldingi vaqt/sinxronlash mexanizmi saqlanadi
-        const targetScrollY = curIdx * 150;
+        const targetScrollY = curIdx * lyricRowSpacing;
         smoothScrollY += (targetScrollY - smoothScrollY) * 0.085;
 
         // Matn qatorlari oldindan hisoblangan: render paytida wrap/measureText yo'q.
         lyrics.forEach((item, idx) => {
-          const itemTargetY = yBase + (idx * 150) - smoothScrollY;
+          const itemTargetY = yBase + (idx * lyricRowSpacing) - smoothScrollY;
           if (itemTargetY > 400 && itemTargetY < 1720) {
             const active = idx === curIdx;
-            const layout = active ? lyricLayouts[idx].active : lyricLayouts[idx].inactive;
-            const { font, lines, lineHeight } = layout;
-            const firstY = itemTargetY - ((lines.length - 1) * lineHeight) / 2;
+            const lines = lyricLayouts[idx];
+            const firstY = itemTargetY - ((lines.length - 1) * lyricLineHeight) / 2;
             ctx.save();
-            ctx.font = font;
+            ctx.font = commonFont;
             ctx.textAlign = "left";
             ctx.textBaseline = "middle";
             ctx.shadowBlur = 0;
             ctx.fillStyle = active ? "#ffffff" : "rgba(196,204,216,0.72)";
             lines.forEach((line, lineIndex) => {
-              ctx.fillText(line, 100, firstY + lineIndex * lineHeight, 880);
+              ctx.fillText(line, 100, firstY + lineIndex * lyricLineHeight, 880);
             });
             ctx.restore();
           }
